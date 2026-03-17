@@ -2,140 +2,133 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>🦞 赛博任务看板</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>🦞 赛博 Mission Control</title>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;500&display=swap');
 *{margin:0;padding:0;box-sizing:border-box}
-body{
-  font-family:'Noto Sans SC',-apple-system,sans-serif;
-  background:#0a0a1a;color:#e0e0e0;min-height:100vh;
-}
-body::before{
-  content:'';position:fixed;top:0;left:0;right:0;bottom:0;
-  background:radial-gradient(ellipse at 20% 50%,rgba(233,69,96,.08) 0%,transparent 50%),
-    radial-gradient(ellipse at 80% 20%,rgba(72,149,239,.08) 0%,transparent 50%),
-    radial-gradient(ellipse at 50% 80%,rgba(76,201,240,.05) 0%,transparent 50%);
-  z-index:-1;animation:bgP 8s ease-in-out infinite alternate;
-}
-@keyframes bgP{0%{opacity:.6}100%{opacity:1}}
+body{font-family:'Noto Sans SC',-apple-system,sans-serif;background:#06060f;color:#e0e0e0;min-height:100vh}
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse at 15% 50%,rgba(233,69,96,.06) 0%,transparent 50%),radial-gradient(ellipse at 85% 15%,rgba(72,149,239,.06) 0%,transparent 50%),radial-gradient(ellipse at 50% 85%,rgba(76,201,240,.04) 0%,transparent 50%);z-index:-1}
 
 /* Header */
-.header{padding:28px 40px 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,.06)}
+.header{padding:24px 36px 18px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,.04)}
 .header-l{display:flex;align-items:center;gap:14px}
-.logo{font-size:44px;animation:fl 3s ease-in-out infinite}
+.logo{font-size:40px;animation:fl 3s ease-in-out infinite}
 @keyframes fl{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
-.header h1{font-size:26px;font-weight:700;background:linear-gradient(135deg,#e94560,#4cc9f0);-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:2px}
-.subtitle{font-size:12px;color:#555;margin-top:3px;letter-spacing:1px}
+.header h1{font-size:22px;font-weight:700;background:linear-gradient(135deg,#e94560,#4cc9f0);-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:1px}
+.subtitle{font-size:11px;color:#444;margin-top:2px;letter-spacing:1px;font-family:'JetBrains Mono',monospace}
 .header-r{text-align:right}
-.update-time{font-size:11px;color:#444;font-family:monospace}
-.badge{display:inline-block;padding:3px 10px;border-radius:20px;font-size:10px;font-weight:500;margin-top:5px;background:rgba(76,201,240,.15);color:#4cc9f0;border:1px solid rgba(76,201,240,.3);animation:pul 2s ease-in-out infinite}
-@keyframes pul{0%,100%{box-shadow:0 0 0 0 rgba(76,201,240,.2)}50%{box-shadow:0 0 10px 3px rgba(76,201,240,.15)}}
+.update-time{font-size:10px;color:#3a3a3a;font-family:'JetBrains Mono',monospace}
+.badge{display:inline-block;padding:3px 10px;border-radius:20px;font-size:10px;font-weight:500;margin-top:4px;background:rgba(46,196,182,.12);color:#2ec4b6;border:1px solid rgba(46,196,182,.25);animation:pul 2s ease-in-out infinite}
+@keyframes pul{0%,100%{box-shadow:0 0 0 0 rgba(46,196,182,.15)}50%{box-shadow:0 0 10px 3px rgba(46,196,182,.1)}}
 .dot{display:inline-block;width:5px;height:5px;border-radius:50%;background:#2ec4b6;margin-right:5px;animation:bk 1.5s ease-in-out infinite}
 @keyframes bk{0%,100%{opacity:1}50%{opacity:.3}}
 
-/* Stats */
-.stats{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;padding:20px 40px}
-.stat{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:14px;padding:16px;text-align:center;transition:all .3s;position:relative;overflow:hidden}
-.stat::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;border-radius:14px 14px 0 0}
-.stat:nth-child(1)::before{background:linear-gradient(90deg,#e94560,#ff6b6b)}
-.stat:nth-child(2)::before{background:linear-gradient(90deg,#4895ef,#4cc9f0)}
-.stat:nth-child(3)::before{background:linear-gradient(90deg,#f9c74f,#f4845f)}
-.stat:nth-child(4)::before{background:linear-gradient(90deg,#2ec4b6,#43aa8b)}
-.stat:nth-child(5)::before{background:linear-gradient(90deg,#7b2ff7,#c084fc)}
-.stat:hover{transform:translateY(-3px);border-color:rgba(255,255,255,.12);box-shadow:0 6px 24px rgba(0,0,0,.3)}
-.stat-n{font-size:32px;font-weight:900;line-height:1;margin-bottom:4px}
-.stat:nth-child(1) .stat-n{color:#e94560}
-.stat:nth-child(2) .stat-n{color:#4cc9f0}
-.stat:nth-child(3) .stat-n{color:#f9c74f}
-.stat:nth-child(4) .stat-n{color:#2ec4b6}
-.stat:nth-child(5) .stat-n{color:#c084fc}
-.stat-l{font-size:11px;color:#777;text-transform:uppercase;letter-spacing:2px}
+/* 控制面板区域 */
+.control-panel{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;padding:20px 36px}
 
-/* Progress */
-.prog-wrap{padding:16px 40px 0}
-.prog-info{display:flex;justify-content:space-between;font-size:10px;color:#555;margin-bottom:5px}
-.prog{height:5px;background:rgba(255,255,255,.05);border-radius:3px;overflow:hidden;display:flex}
+/* 赛博状态卡 */
+.agent-card{background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.06);border-radius:16px;padding:20px;position:relative;overflow:hidden}
+.agent-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,#e94560,#4cc9f0,#2ec4b6)}
+.agent-header{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.agent-avatar{font-size:36px;background:rgba(233,69,96,.08);border-radius:12px;width:52px;height:52px;display:flex;align-items:center;justify-content:center}
+.agent-name{font-size:18px;font-weight:700;color:#f0f0f0}
+.agent-role{font-size:10px;color:#666;font-family:'JetBrains Mono',monospace}
+.agent-status{display:inline-block;padding:2px 8px;border-radius:10px;font-size:9px;font-weight:600;background:rgba(46,196,182,.12);color:#2ec4b6;border:1px solid rgba(46,196,182,.2);margin-top:2px}
+.agent-stats{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:2px}
+.agent-stat{background:rgba(255,255,255,.03);border-radius:8px;padding:8px 10px}
+.agent-stat-label{font-size:9px;color:#555;text-transform:uppercase;letter-spacing:1px}
+.agent-stat-value{font-size:14px;font-weight:700;color:#ccc;margin-top:2px;font-family:'JetBrains Mono',monospace}
+.agent-current{margin-top:10px;padding:8px 10px;background:rgba(72,149,239,.06);border-radius:8px;border-left:3px solid #4895ef}
+.agent-current-label{font-size:9px;color:#4895ef;text-transform:uppercase;letter-spacing:1px;margin-bottom:3px}
+.agent-current-task{font-size:12px;color:#aaa}
+
+/* 活动时间线 */
+.timeline-card{background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.06);border-radius:16px;padding:20px;overflow:hidden;position:relative}
+.timeline-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,#f9c74f,#f4845f)}
+.section-title{font-size:13px;font-weight:600;color:#999;margin-bottom:12px;display:flex;align-items:center;gap:6px;letter-spacing:1px}
+.activities{display:flex;flex-direction:column;gap:6px;max-height:280px;overflow-y:auto}
+.activities::-webkit-scrollbar{width:3px}
+.activities::-webkit-scrollbar-thumb{background:rgba(255,255,255,.1);border-radius:3px}
+.activity{display:flex;gap:8px;padding:6px 8px;border-radius:6px;transition:background .2s}
+.activity:hover{background:rgba(255,255,255,.03)}
+.act-icon{font-size:14px;flex-shrink:0;margin-top:1px}
+.act-body{display:flex;flex-direction:column;gap:1px;min-width:0}
+.act-time{font-size:9px;color:#444;font-family:'JetBrains Mono',monospace}
+.act-text{font-size:11px;color:#999;line-height:1.4;word-break:break-word}
+.activity-empty{text-align:center;padding:40px 0;color:#333;font-size:12px}
+
+/* 统计图表 */
+.stats-card{background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.06);border-radius:16px;padding:20px;position:relative;overflow:hidden}
+.stats-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,#2ec4b6,#43aa8b)}
+.pie-container{display:flex;align-items:center;gap:16px;margin-top:4px}
+.pie{width:100px;height:100px;border-radius:50%;background:conic-gradient(#4895ef 0% 50%, #e94560 50% 75%, #7b2ff7 75% 87%, #2ec4b6 87% 99%);flex-shrink:0;position:relative}
+.pie::after{content:'';position:absolute;inset:25px;background:#0a0a14;border-radius:50%}
+.legend{display:flex;flex-direction:column;gap:5px;flex:1}
+.legend-item{font-size:11px;color:#888;display:flex;align-items:center;gap:6px}
+.legend-dot{width:8px;height:8px;border-radius:2px;flex-shrink:0}
+.legend-n{color:#555;font-family:'JetBrains Mono',monospace;font-size:10px}
+.mini-stats{display:grid;grid-template-columns:repeat(2,1fr);gap:6px;margin-top:14px}
+.mini-stat{text-align:center;padding:8px;background:rgba(255,255,255,.03);border-radius:8px}
+.mini-stat-n{font-size:20px;font-weight:900;font-family:'JetBrains Mono',monospace}
+.mini-stat-l{font-size:9px;color:#555;text-transform:uppercase;letter-spacing:1px;margin-top:2px}
+
+/* 进度条 */
+.prog-wrap{padding:4px 36px 0}
+.prog-info{display:flex;justify-content:space-between;font-size:10px;color:#444;margin-bottom:4px;font-family:'JetBrains Mono',monospace}
+.prog{height:4px;background:rgba(255,255,255,.04);border-radius:2px;overflow:hidden;display:flex}
 .prog-done{background:linear-gradient(90deg,#2ec4b6,#43aa8b)}
 .prog-doing{background:linear-gradient(90deg,#4895ef,#4cc9f0)}
 .prog-pend{background:linear-gradient(90deg,#f9c74f,#f4845f)}
 
 /* Tabs */
-.tabs{display:flex;gap:6px;padding:20px 40px 0;flex-wrap:wrap}
-.tab{
-  padding:8px 18px;border-radius:10px;border:1px solid rgba(255,255,255,.08);
-  background:rgba(255,255,255,.03);color:#888;font-size:13px;font-weight:500;
-  cursor:pointer;transition:all .25s;display:flex;align-items:center;gap:6px;
-}
-.tab:hover{background:rgba(255,255,255,.06);color:#ccc;border-color:rgba(255,255,255,.15)}
-.tab.active{
-  background:rgba(var(--tab-r,76),var(--tab-g,201),var(--tab-b,240),.12);
-  color:var(--tab-color,#4cc9f0);
-  border-color:var(--tab-color,#4cc9f0);
-  box-shadow:0 0 12px rgba(76,201,240,.1);
-}
-.tab-count{
-  background:rgba(255,255,255,.1);border-radius:8px;
-  padding:1px 7px;font-size:11px;font-weight:700;
-}
-.tab.active .tab-count{background:rgba(255,255,255,.15)}
+.tabs{display:flex;gap:5px;padding:18px 36px 0;flex-wrap:wrap}
+.tab{padding:7px 14px;border-radius:8px;border:1px solid rgba(255,255,255,.06);background:rgba(255,255,255,.02);color:#666;font-size:12px;font-weight:500;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:5px}
+.tab:hover{background:rgba(255,255,255,.05);color:#aaa;border-color:rgba(255,255,255,.1)}
+.tab.active{background:rgba(76,201,240,.08);color:var(--tab-color,#4cc9f0);border-color:rgba(76,201,240,.2);box-shadow:0 0 8px rgba(76,201,240,.06)}
+.tab-count{background:rgba(255,255,255,.08);border-radius:6px;padding:1px 6px;font-size:10px;font-weight:700}
+.tab.active .tab-count{background:rgba(255,255,255,.12)}
 
-/* Tab panels */
-.tab-panel{display:none;padding:12px 40px 32px}
-.tab-panel.active{display:block;animation:fadeIn .3s ease}
-@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+/* Panels */
+.tab-panel{display:none;padding:10px 36px 28px}
+.tab-panel.active{display:block;animation:fadeIn .25s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
 
 /* Board */
-.board{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
-.col{background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.05);border-radius:14px;overflow:hidden}
-.col-head{
-  padding:14px 18px;font-size:13px;font-weight:600;letter-spacing:1px;
-  display:flex;align-items:center;justify-content:space-between;
-  border-bottom:1px solid rgba(255,255,255,.05);
-}
-.col-doing{background:linear-gradient(135deg,rgba(233,69,96,.1),rgba(233,69,96,.02));color:#e94560}
-.col-pending{background:linear-gradient(135deg,rgba(72,149,239,.1),rgba(72,149,239,.02));color:#4895ef}
-.col-done{background:linear-gradient(135deg,rgba(46,196,182,.1),rgba(46,196,182,.02));color:#2ec4b6}
-.cnt{background:rgba(255,255,255,.1);border-radius:8px;padding:1px 8px;font-size:11px}
-.col-body{padding:10px;display:flex;flex-direction:column;gap:8px;min-height:160px}
+.board{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.col{background:rgba(255,255,255,.015);border:1px solid rgba(255,255,255,.04);border-radius:12px;overflow:hidden}
+.col-head{padding:12px 16px;font-size:12px;font-weight:600;letter-spacing:.5px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,.04)}
+.col-doing{background:linear-gradient(135deg,rgba(233,69,96,.08),transparent);color:#e94560}
+.col-pending{background:linear-gradient(135deg,rgba(72,149,239,.08),transparent);color:#4895ef}
+.col-done{background:linear-gradient(135deg,rgba(46,196,182,.08),transparent);color:#2ec4b6}
+.cnt{background:rgba(255,255,255,.08);border-radius:6px;padding:1px 7px;font-size:10px}
+.col-body{padding:8px;display:flex;flex-direction:column;gap:7px;min-height:120px}
 
 /* Cards */
-.card{
-  background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06);
-  border-radius:10px;padding:14px;transition:all .25s;
-}
-.card:hover{
-  background:rgba(255,255,255,.07);border-color:rgba(255,255,255,.12);
-  transform:translateX(3px);box-shadow:0 3px 16px rgba(0,0,0,.2);
-}
-.card-title{font-size:13px;font-weight:600;margin-bottom:6px;color:#f0f0f0}
-.card-tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:6px}
-.tag{display:inline-block;padding:2px 7px;border-radius:5px;font-size:9px;font-weight:500;letter-spacing:.3px}
-.tag-p0{background:rgba(233,69,96,.2);color:#ff6b6b;border:1px solid rgba(233,69,96,.3)}
-.tag-p1{background:rgba(255,159,67,.2);color:#ffa94d;border:1px solid rgba(255,159,67,.3)}
-.tag-p2{background:rgba(249,199,79,.2);color:#f9c74f;border:1px solid rgba(249,199,79,.3)}
-.tag-p3{background:rgba(46,196,182,.2);color:#2ec4b6;border:1px solid rgba(46,196,182,.3)}
-.tag-stage{background:rgba(72,149,239,.12);color:#74b9ff;border:1px solid rgba(72,149,239,.2)}
-.card-desc{font-size:11px;color:#777;line-height:1.5;margin-top:4px}
-.card-block{
-  font-size:10px;color:#e94560;margin-top:5px;padding:5px 9px;
-  background:rgba(233,69,96,.08);border-radius:5px;border-left:3px solid #e94560;
-}
-.card-log{
-  font-size:9px;color:#4a4a4a;margin-top:6px;padding-top:6px;
-  border-top:1px solid rgba(255,255,255,.04);
-  font-family:monospace;line-height:1.5;white-space:pre-line;
-}
-.empty{text-align:center;padding:32px 16px;color:#3a3a3a;font-size:12px}
-.footer{text-align:center;padding:20px;color:#2a2a2a;font-size:11px;border-top:1px solid rgba(255,255,255,.03)}
+.card{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.05);border-radius:9px;padding:12px;transition:all .2s}
+.card:hover{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.1);transform:translateX(2px);box-shadow:0 2px 12px rgba(0,0,0,.15)}
+.card-title{font-size:12px;font-weight:600;margin-bottom:5px;color:#eee}
+.card-tags{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:5px}
+.tag{display:inline-block;padding:1px 6px;border-radius:4px;font-size:9px;font-weight:500}
+.tag-p0{background:rgba(233,69,96,.18);color:#ff6b6b;border:1px solid rgba(233,69,96,.25)}
+.tag-p1{background:rgba(255,159,67,.18);color:#ffa94d;border:1px solid rgba(255,159,67,.25)}
+.tag-p2{background:rgba(249,199,79,.18);color:#f9c74f;border:1px solid rgba(249,199,79,.25)}
+.tag-p3{background:rgba(46,196,182,.18);color:#2ec4b6;border:1px solid rgba(46,196,182,.25)}
+.tag-stage{background:rgba(72,149,239,.1);color:#74b9ff;border:1px solid rgba(72,149,239,.15)}
+.card-desc{font-size:10px;color:#666;line-height:1.4;margin-top:3px}
+.card-block{font-size:9px;color:#e94560;margin-top:4px;padding:4px 8px;background:rgba(233,69,96,.06);border-radius:4px;border-left:2px solid #e94560}
+.card-log{font-size:8px;color:#3a3a3a;margin-top:5px;padding-top:5px;border-top:1px solid rgba(255,255,255,.03);font-family:'JetBrains Mono',monospace;line-height:1.5;white-space:pre-line}
+.empty{text-align:center;padding:28px 12px;color:#333;font-size:11px}
+.footer{text-align:center;padding:18px;color:#222;font-size:10px;border-top:1px solid rgba(255,255,255,.03);font-family:'JetBrains Mono',monospace}
 
-@media(max-width:900px){
-  .stats{grid-template-columns:repeat(3,1fr)}
+@media(max-width:1000px){
+  .control-panel{grid-template-columns:1fr}
   .board{grid-template-columns:1fr}
-  .header{flex-direction:column;gap:10px;text-align:center}
+  .header{flex-direction:column;gap:8px;text-align:center}
   .header-r{text-align:center}
   .tabs{justify-content:center}
-  .tab-panel{padding:12px 16px 32px}
+  .tab-panel{padding:10px 16px 28px}
+  .control-panel{padding:16px}
 }
 </style>
 </head>
@@ -145,18 +138,63 @@ body::before{
   <div class="header-l">
     <div class="logo">🦞</div>
     <div>
-      <h1>赛博任务看板</h1>
-      <div class="subtitle">CYBER LOBSTER · TASK DASHBOARD v4.1</div>
+      <h1>MISSION CONTROL</h1>
+      <div class="subtitle">CYBER LOBSTER · 2026-03-17</div>
     </div>
   </div>
   <div class="header-r">
-    <div class="update-time">LAST UPDATE: 2026-03-17 14:30 CST</div>
+    <div class="update-time">2026-03-17 15:28 CST</div>
     <div class="badge"><span class="dot"></span>ONLINE</div>
   </div>
 </div>
 
+<!-- 控制面板 -->
+<div class="control-panel">
+  <!-- 赛博状态卡 -->
+  <div class="agent-card">
+    <div class="agent-header">
+      <div class="agent-avatar">🦞</div>
+      <div>
+        <div class="agent-name">赛博</div>
+        <div class="agent-role">claude-opus-4-6 · fx-netease</div>
+        <div class="agent-status"><span class="dot"></span>运行中</div>
+      </div>
+    </div>
+    <div class="agent-stats">
+      <div class="agent-stat"><div class="agent-stat-label">执行中</div><div class="agent-stat-value" style="color:#4cc9f0">2</div></div>
+      <div class="agent-stat"><div class="agent-stat-label">待处理</div><div class="agent-stat-value" style="color:#f9c74f">6</div></div>
+      <div class="agent-stat"><div class="agent-stat-label">已完成</div><div class="agent-stat-value" style="color:#2ec4b6">1</div></div>
+      <div class="agent-stat"><div class="agent-stat-label">P0/P1</div><div class="agent-stat-value" style="color:#e94560">5</div></div>
+    </div>
+    <div class="agent-current">
+      <div class="agent-current-label">▶ 当前任务</div>
+      <div class="agent-current-task">找施旸当面聊 MOB 画像采买服务</div>
+    </div>
+  </div>
+
+  <!-- 活动时间线 -->
+  <div class="timeline-card">
+    <div class="section-title">⚡ 最近活动</div>
+    <div class="activities"><div class="activity"><span class="act-icon">📸</span><div class="act-body"><span class="act-time">14:26</span><span class="act-text">从微信截图识别待办：找施旸聊 MOB 画像采买</span></div></div><div class="activity"><span class="act-icon">🚀</span><div class="act-body"><span class="act-time">14:30</span><span class="act-text">看板 v4.1 上线：Tab 分类切换</span></div></div><div class="activity"><span class="act-icon">📄</span><div class="act-body"><span class="act-time">14:04</span><span class="act-text">GitHub 用户名迁移：iiiijoker → ihustcheng</span></div></div><div class="activity"><span class="act-icon">🌐</span><div class="act-body"><span class="act-time">13:58</span><span class="act-text">GitHub Pages 部署成功</span></div></div><div class="activity"><span class="act-icon">🔍</span><div class="act-body"><span class="act-time">13:09</span><span class="act-text">研究 Edict 三省六部多 Agent 架构</span></div></div><div class="activity"><span class="act-icon">🧠</span><div class="act-body"><span class="act-time">13:30</span><span class="act-text">自审机制（门下省）写入 AGENTS-HEARTBEAT.md</span></div></div><div class="activity"><span class="act-icon">📊</span><div class="act-body"><span class="act-time">11:26</span><span class="act-text">系统架构看板上线（飞书文档）</span></div></div><div class="activity"><span class="act-icon">🗑️</span><div class="act-body"><span class="act-time">09:59</span><span class="act-text">取消美股港股日常监控（4 个 Cron）</span></div></div></div>
+  </div>
+
+  <!-- 统计图表 -->
+  <div class="stats-card">
+    <div class="section-title">📊 任务分布</div>
+    <div class="pie-container">
+      <div class="pie"></div>
+      <div class="legend"><div class="legend-item"><span class="legend-dot" style="background:#4895ef"></span>🔧 赛博系统 <span class="legend-n">4</span></div><div class="legend-item"><span class="legend-dot" style="background:#e94560"></span>💼 工作 <span class="legend-n">2</span></div><div class="legend-item"><span class="legend-dot" style="background:#7b2ff7"></span>🎓 MBA <span class="legend-n">1</span></div><div class="legend-item"><span class="legend-dot" style="background:#2ec4b6"></span>📝 内容创作 <span class="legend-n">1</span></div></div>
+    </div>
+    <div class="mini-stats">
+      <div class="mini-stat"><div class="mini-stat-n" style="color:#e94560">9</div><div class="mini-stat-l">总任务</div></div>
+      <div class="mini-stat"><div class="mini-stat-n" style="color:#2ec4b6">11%</div><div class="mini-stat-l">完成率</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- 进度条 -->
 <div class="prog-wrap">
-  <div class="prog-info"><span>总体进度</span><span>1 完成 · 2 执行中 · 6 待处理</span></div>
+  <div class="prog-info"><span>PROGRESS</span><span>1/9 DONE</span></div>
   <div class="prog">
     <div class="prog-done" style="width:11%"></div>
     <div class="prog-doing" style="width:22%"></div>
@@ -164,29 +202,23 @@ body::before{
   </div>
 </div>
 
-<div class="stats">
-  <div class="stat"><div class="stat-n">9</div><div class="stat-l">总任务</div></div>
-  <div class="stat"><div class="stat-n">2</div><div class="stat-l">执行中</div></div>
-  <div class="stat"><div class="stat-n">6</div><div class="stat-l">待处理</div></div>
-  <div class="stat"><div class="stat-n">1</div><div class="stat-l">已完成</div></div>
-  <div class="stat"><div class="stat-n">5</div><div class="stat-l">P0/P1</div></div>
-</div>
-
-<div class="tabs"><button class="tab active" data-tab="all" style="--tab-color: #4cc9f0">📊 全部 <span class="tab-count">9</span></button>
-<button class="tab" data-tab="work工作" style="--tab-color: #e94560">💼 工作 <span class="tab-count">2</span></button>
-<button class="tab" data-tab="mbaMBA" style="--tab-color: #7b2ff7">🎓 MBA <span class="tab-count">1</span></button>
-<button class="tab" data-tab="sys赛博系统" style="--tab-color: #4895ef">🔧 赛博系统 <span class="tab-count">4</span></button>
-<button class="tab" data-tab="content内容创作" style="--tab-color: #2ec4b6">📝 内容创作 <span class="tab-count">1</span></button></div>
+<!-- Tabs -->
+<div class="tabs"><button class="tab active" data-tab="all">📊 全部 <span class="tab-count">9</span></button>
+<button class="tab" data-tab="work工作" style="--tab-color:#e94560">💼 工作 <span class="tab-count">2</span></button>
+<button class="tab" data-tab="mbaMBA" style="--tab-color:#7b2ff7">🎓 MBA <span class="tab-count">1</span></button>
+<button class="tab" data-tab="sys赛博系统" style="--tab-color:#4895ef">🔧 赛博系统 <span class="tab-count">4</span></button>
+<button class="tab" data-tab="content内容创作" style="--tab-color:#2ec4b6">📝 内容创作 <span class="tab-count">1</span></button></div>
 <div class="tab-panel active" id="tab-all"><div class="board">
-<div class="col"><div class="col-head col-doing">🔄 进行中 <span class="cnt">2</span></div><div class="col-body"><div class="card" ><div class="card-title">找施旸当面聊 MOB 画像采买服务</div><div class="card-tags"><span class="tag tag-p1">P1 重要</span><span class="tag tag-stage">⚡ 执行</span></div><div class="card-desc">已约今天聊。广告负责人：施旸</div><div class="card-log">[3/17 14:26] 从微信聊天记录截图录入</div></div><div class="card" ><div class="card-title">记忆系统优化</div><div class="card-tags"><span class="tag tag-p1">P1 重要</span><span class="tag tag-stage">⚡ 执行</span></div><div class="card-desc">MEMORY.md 瘦身 + AGENTS-HEARTBEAT.md 拆分</div><div class="card-log">[3/16] 启动诊断
-[3/17] 写入自审机制</div></div></div></div>
-<div class="col"><div class="col-head col-pending">⏸️ 待处理 <span class="cnt">6</span></div><div class="col-body"><div class="card" ><div class="card-title">百亿级曲库数据处理方案</div><div class="card-tags"><span class="tag tag-p1">P1 重要</span><span class="tag tag-stage">📋 规划</span></div><div class="card-desc">方案待落地</div></div><div class="card" ><div class="card-title">MBA 毕业论文选题与撰写</div><div class="card-tags"><span class="tag tag-p1">P1 重要</span><span class="tag tag-stage">📋 规划</span></div><div class="card-desc">待选题</div></div><div class="card" ><div class="card-title">技术博客/公众号开通</div><div class="card-tags"><span class="tag tag-p2">P2 普通</span><span class="tag tag-stage">📋 规划</span></div><div class="card-desc">待启动</div></div><div class="card" ><div class="card-title">AGENTS-HEARTBEAT.md 瘦身</div><div class="card-tags"><span class="tag tag-p2">P2 普通</span><span class="tag tag-stage">📋 规划</span></div><div class="card-desc">目标 25KB→5KB</div></div><div class="card" ><div class="card-title">抖音监控修复</div><div class="card-tags"><span class="tag tag-p2">P2 普通</span><span class="tag tag-stage">📋 规划</span></div><div class="card-block">⚠️ Chrome Relay 扩展连接问题</div></div><div class="card" ><div class="card-title">PDF 生成器依赖修复</div><div class="card-tags"><span class="tag tag-p3">P3 低优</span><span class="tag tag-stage">📋 规划</span></div><div class="card-block">⚠️ WeasyPrint 依赖问题</div></div></div></div>
-<div class="col"><div class="col-head col-done">✅ 已完成 <span class="cnt">1</span></div><div class="col-body"><div class="card" style="opacity: 0.6;"><div class="card-title">飞书任务看板上线</div><div class="card-tags"><span class="tag tag-p1">P1 重要</span><span class="tag tag-stage">🗄️ 归档</span></div><div class="card-desc">v4.0 完成</div><div class="card-log">[11:00] 建表
+<div class="col"><div class="col-head col-doing">🔄 进行中 <span class="cnt">2</span></div><div class="col-body"><div class="card" ><div class="card-title">找施旸当面聊 MOB 画像采买服务</div><div class="card-tags"><span class="tag tag-p1">P1 重要</span><span class="tag tag-stage">⚡ 执行</span></div><div class="card-desc">已约今天聊。广告负责人：施旸</div><div class="card-log">[3/17 14:26] 从微信截图录入</div></div><div class="card" ><div class="card-title">记忆系统优化</div><div class="card-tags"><span class="tag tag-p1">P1 重要</span><span class="tag tag-stage">⚡ 执行</span></div><div class="card-desc">MEMORY.md 瘦身 + 自审机制落地</div><div class="card-log">[3/16] 启动诊断
+[3/17] 自审机制写入</div></div></div></div>
+<div class="col"><div class="col-head col-pending">⏸️ 待处理 <span class="cnt">6</span></div><div class="col-body"><div class="card" ><div class="card-title">百亿级曲库数据处理方案</div><div class="card-tags"><span class="tag tag-p1">P1 重要</span><span class="tag tag-stage">📋 规划</span></div><div class="card-desc">方案待落地</div></div><div class="card" ><div class="card-title">MBA 毕业论文选题与撰写</div><div class="card-tags"><span class="tag tag-p1">P1 重要</span><span class="tag tag-stage">📋 规划</span></div><div class="card-desc">待选题</div></div><div class="card" ><div class="card-title">技术博客/公众号开通</div><div class="card-tags"><span class="tag tag-p2">P2 普通</span><span class="tag tag-stage">📋 规划</span></div><div class="card-desc">待启动</div></div><div class="card" ><div class="card-title">AGENTS-HEARTBEAT.md 瘦身</div><div class="card-tags"><span class="tag tag-p2">P2 普通</span><span class="tag tag-stage">📋 规划</span></div><div class="card-desc">目标 25KB→5KB</div></div><div class="card" ><div class="card-title">抖音监控修复</div><div class="card-tags"><span class="tag tag-p2">P2 普通</span><span class="tag tag-stage">📋 规划</span></div><div class="card-block">⚠️ Chrome Relay 连接问题</div></div><div class="card" ><div class="card-title">PDF 生成器依赖修复</div><div class="card-tags"><span class="tag tag-p3">P3 低优</span><span class="tag tag-stage">📋 规划</span></div><div class="card-block">⚠️ WeasyPrint 依赖问题</div></div></div></div>
+<div class="col"><div class="col-head col-done">✅ 已完成 <span class="cnt">1</span></div><div class="col-body"><div class="card" style="opacity:0.55"><div class="card-title">飞书任务看板上线</div><div class="card-tags"><span class="tag tag-p1">P1 重要</span><span class="tag tag-stage">🗄️ 归档</span></div><div class="card-desc">v4.1 + GitHub Pages + Tab 分类</div><div class="card-log">[11:00] 建表
 [13:30] v4.0 升级
-[13:58] GitHub Pages 上线</div></div></div></div>
+[13:58] GitHub Pages
+[14:30] Tab 分类</div></div></div></div>
 </div></div>
 <div class="tab-panel" id="tab-work工作"><div class="board">
-<div class="col"><div class="col-head col-doing">🔄 进行中 <span class="cnt">1</span></div><div class="col-body"><div class="card" ><div class="card-title">找施旸当面聊 MOB 画像采买服务</div><div class="card-tags"><span class="tag tag-p1">P1 重要</span><span class="tag tag-stage">⚡ 执行</span></div><div class="card-desc">已约今天聊。广告负责人：施旸</div><div class="card-log">[3/17 14:26] 从微信聊天记录截图录入</div></div></div></div>
+<div class="col"><div class="col-head col-doing">🔄 进行中 <span class="cnt">1</span></div><div class="col-body"><div class="card" ><div class="card-title">找施旸当面聊 MOB 画像采买服务</div><div class="card-tags"><span class="tag tag-p1">P1 重要</span><span class="tag tag-stage">⚡ 执行</span></div><div class="card-desc">已约今天聊。广告负责人：施旸</div><div class="card-log">[3/17 14:26] 从微信截图录入</div></div></div></div>
 <div class="col"><div class="col-head col-pending">⏸️ 待处理 <span class="cnt">1</span></div><div class="col-body"><div class="card" ><div class="card-title">百亿级曲库数据处理方案</div><div class="card-tags"><span class="tag tag-p1">P1 重要</span><span class="tag tag-stage">📋 规划</span></div><div class="card-desc">方案待落地</div></div></div></div>
 <div class="col"><div class="col-head col-done">✅ 已完成 <span class="cnt">0</span></div><div class="col-body"><div class="empty">📭 暂无</div></div></div>
 </div></div>
@@ -196,12 +228,13 @@ body::before{
 <div class="col"><div class="col-head col-done">✅ 已完成 <span class="cnt">0</span></div><div class="col-body"><div class="empty">📭 暂无</div></div></div>
 </div></div>
 <div class="tab-panel" id="tab-sys赛博系统"><div class="board">
-<div class="col"><div class="col-head col-doing">🔄 进行中 <span class="cnt">1</span></div><div class="col-body"><div class="card" ><div class="card-title">记忆系统优化</div><div class="card-tags"><span class="tag tag-p1">P1 重要</span><span class="tag tag-stage">⚡ 执行</span></div><div class="card-desc">MEMORY.md 瘦身 + AGENTS-HEARTBEAT.md 拆分</div><div class="card-log">[3/16] 启动诊断
-[3/17] 写入自审机制</div></div></div></div>
-<div class="col"><div class="col-head col-pending">⏸️ 待处理 <span class="cnt">3</span></div><div class="col-body"><div class="card" ><div class="card-title">AGENTS-HEARTBEAT.md 瘦身</div><div class="card-tags"><span class="tag tag-p2">P2 普通</span><span class="tag tag-stage">📋 规划</span></div><div class="card-desc">目标 25KB→5KB</div></div><div class="card" ><div class="card-title">抖音监控修复</div><div class="card-tags"><span class="tag tag-p2">P2 普通</span><span class="tag tag-stage">📋 规划</span></div><div class="card-block">⚠️ Chrome Relay 扩展连接问题</div></div><div class="card" ><div class="card-title">PDF 生成器依赖修复</div><div class="card-tags"><span class="tag tag-p3">P3 低优</span><span class="tag tag-stage">📋 规划</span></div><div class="card-block">⚠️ WeasyPrint 依赖问题</div></div></div></div>
-<div class="col"><div class="col-head col-done">✅ 已完成 <span class="cnt">1</span></div><div class="col-body"><div class="card" style="opacity: 0.6;"><div class="card-title">飞书任务看板上线</div><div class="card-tags"><span class="tag tag-p1">P1 重要</span><span class="tag tag-stage">🗄️ 归档</span></div><div class="card-desc">v4.0 完成</div><div class="card-log">[11:00] 建表
+<div class="col"><div class="col-head col-doing">🔄 进行中 <span class="cnt">1</span></div><div class="col-body"><div class="card" ><div class="card-title">记忆系统优化</div><div class="card-tags"><span class="tag tag-p1">P1 重要</span><span class="tag tag-stage">⚡ 执行</span></div><div class="card-desc">MEMORY.md 瘦身 + 自审机制落地</div><div class="card-log">[3/16] 启动诊断
+[3/17] 自审机制写入</div></div></div></div>
+<div class="col"><div class="col-head col-pending">⏸️ 待处理 <span class="cnt">3</span></div><div class="col-body"><div class="card" ><div class="card-title">AGENTS-HEARTBEAT.md 瘦身</div><div class="card-tags"><span class="tag tag-p2">P2 普通</span><span class="tag tag-stage">📋 规划</span></div><div class="card-desc">目标 25KB→5KB</div></div><div class="card" ><div class="card-title">抖音监控修复</div><div class="card-tags"><span class="tag tag-p2">P2 普通</span><span class="tag tag-stage">📋 规划</span></div><div class="card-block">⚠️ Chrome Relay 连接问题</div></div><div class="card" ><div class="card-title">PDF 生成器依赖修复</div><div class="card-tags"><span class="tag tag-p3">P3 低优</span><span class="tag tag-stage">📋 规划</span></div><div class="card-block">⚠️ WeasyPrint 依赖问题</div></div></div></div>
+<div class="col"><div class="col-head col-done">✅ 已完成 <span class="cnt">1</span></div><div class="col-body"><div class="card" style="opacity:0.55"><div class="card-title">飞书任务看板上线</div><div class="card-tags"><span class="tag tag-p1">P1 重要</span><span class="tag tag-stage">🗄️ 归档</span></div><div class="card-desc">v4.1 + GitHub Pages + Tab 分类</div><div class="card-log">[11:00] 建表
 [13:30] v4.0 升级
-[13:58] GitHub Pages 上线</div></div></div></div>
+[13:58] GitHub Pages
+[14:30] Tab 分类</div></div></div></div>
 </div></div>
 <div class="tab-panel" id="tab-content内容创作"><div class="board">
 <div class="col"><div class="col-head col-doing">🔄 进行中 <span class="cnt">0</span></div><div class="col-body"><div class="empty">🎯 暂无</div></div></div>
@@ -209,7 +242,7 @@ body::before{
 <div class="col"><div class="col-head col-done">✅ 已完成 <span class="cnt">0</span></div><div class="col-body"><div class="empty">📭 暂无</div></div></div>
 </div></div>
 
-<div class="footer">🦞 赛博任务看板 · Powered by OpenClaw</div>
+<div class="footer">🦞 CYBER LOBSTER MISSION CONTROL · POWERED BY OPENCLAW</div>
 
 <script>
 document.querySelectorAll('.tab').forEach(btn=>{
@@ -221,6 +254,5 @@ document.querySelectorAll('.tab').forEach(btn=>{
   });
 });
 </script>
-
 </body>
 </html>
