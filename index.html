@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🦞 赛博任务看板</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Noto Sans SC', -apple-system, sans-serif;
+    background: #0a0a1a;
+    color: #e0e0e0;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* 背景动画 */
+  body::before {
+    content: '';
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: 
+      radial-gradient(ellipse at 20% 50%, rgba(233, 69, 96, 0.08) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 20%, rgba(72, 149, 239, 0.08) 0%, transparent 50%),
+      radial-gradient(ellipse at 50% 80%, rgba(76, 201, 240, 0.05) 0%, transparent 50%);
+    z-index: -1;
+    animation: bgPulse 8s ease-in-out infinite alternate;
+  }
+
+  @keyframes bgPulse {
+    0% { opacity: 0.6; }
+    100% { opacity: 1; }
+  }
+
+  /* 顶部标题栏 */
+  .header {
+    padding: 32px 40px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .header-left {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .logo {
+    font-size: 48px;
+    animation: float 3s ease-in-out infinite;
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-6px); }
+  }
+
+  .header h1 {
+    font-size: 28px;
+    font-weight: 700;
+    background: linear-gradient(135deg, #e94560, #4cc9f0);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: 2px;
+  }
+
+  .header .subtitle {
+    font-size: 13px;
+    color: #666;
+    margin-top: 4px;
+    letter-spacing: 1px;
+  }
+
+  .header-right {
+    text-align: right;
+  }
+
+  .update-time {
+    font-size: 12px;
+    color: #555;
+    font-family: monospace;
+  }
+
+  .status-badge {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 500;
+    margin-top: 6px;
+    background: rgba(76, 201, 240, 0.15);
+    color: #4cc9f0;
+    border: 1px solid rgba(76, 201, 240, 0.3);
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(76, 201, 240, 0.2); }
+    50% { box-shadow: 0 0 12px 4px rgba(76, 201, 240, 0.15); }
+  }
+
+  /* 统计卡片 */
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 16px;
+    padding: 24px 40px;
+  }
+
+  .stat-card {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 16px;
+    padding: 20px;
+    text-align: center;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    border-radius: 16px 16px 0 0;
+  }
+
+  .stat-card:nth-child(1)::before { background: linear-gradient(90deg, #e94560, #ff6b6b); }
+  .stat-card:nth-child(2)::before { background: linear-gradient(90deg, #4895ef, #4cc9f0); }
+  .stat-card:nth-child(3)::before { background: linear-gradient(90deg, #f9c74f, #f4845f); }
+  .stat-card:nth-child(4)::before { background: linear-gradient(90deg, #2ec4b6, #43aa8b); }
+  .stat-card:nth-child(5)::before { background: linear-gradient(90deg, #7b2ff7, #c084fc); }
+
+  .stat-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(255,255,255,0.12);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+  }
+
+  .stat-number {
+    font-size: 36px;
+    font-weight: 900;
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+
+  .stat-card:nth-child(1) .stat-number { color: #e94560; }
+  .stat-card:nth-child(2) .stat-number { color: #4cc9f0; }
+  .stat-card:nth-child(3) .stat-number { color: #f9c74f; }
+  .stat-card:nth-child(4) .stat-number { color: #2ec4b6; }
+  .stat-card:nth-child(5) .stat-number { color: #c084fc; }
+
+  .stat-label {
+    font-size: 12px;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+  }
+
+  /* 主看板区域 */
+  .board {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    padding: 8px 40px 40px;
+  }
+
+  .column {
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(255,255,255,0.05);
+    border-radius: 16px;
+    padding: 0;
+    overflow: hidden;
+  }
+
+  .column-header {
+    padding: 16px 20px;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+
+  .column:nth-child(1) .column-header { background: linear-gradient(135deg, rgba(233,69,96,0.12), rgba(233,69,96,0.03)); color: #e94560; }
+  .column:nth-child(2) .column-header { background: linear-gradient(135deg, rgba(72,149,239,0.12), rgba(72,149,239,0.03)); color: #4895ef; }
+  .column:nth-child(3) .column-header { background: linear-gradient(135deg, rgba(46,196,182,0.12), rgba(46,196,182,0.03)); color: #2ec4b6; }
+
+  .column-count {
+    background: rgba(255,255,255,0.1);
+    border-radius: 10px;
+    padding: 2px 10px;
+    font-size: 12px;
+  }
+
+  .column-body {
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    min-height: 200px;
+  }
+
+  /* 任务卡片 */
+  .task-card {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 12px;
+    padding: 16px;
+    transition: all 0.3s ease;
+    cursor: default;
+    position: relative;
+  }
+
+  .task-card:hover {
+    background: rgba(255,255,255,0.07);
+    border-color: rgba(255,255,255,0.12);
+    transform: translateX(4px);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+  }
+
+  .task-card .task-title {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #f0f0f0;
+  }
+
+  .task-meta {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 8px;
+  }
+
+  .tag {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 6px;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+  }
+
+  .tag-priority-p0 { background: rgba(233,69,96,0.2); color: #ff6b6b; border: 1px solid rgba(233,69,96,0.3); }
+  .tag-priority-p1 { background: rgba(255,159,67,0.2); color: #ffa94d; border: 1px solid rgba(255,159,67,0.3); }
+  .tag-priority-p2 { background: rgba(249,199,79,0.2); color: #f9c74f; border: 1px solid rgba(249,199,79,0.3); }
+  .tag-priority-p3 { background: rgba(46,196,182,0.2); color: #2ec4b6; border: 1px solid rgba(46,196,182,0.3); }
+
+  .tag-category { background: rgba(123,47,247,0.15); color: #c084fc; border: 1px solid rgba(123,47,247,0.2); }
+  .tag-stage { background: rgba(72,149,239,0.15); color: #74b9ff; border: 1px solid rgba(72,149,239,0.2); }
+
+  .task-progress {
+    font-size: 11px;
+    color: #777;
+    line-height: 1.5;
+    margin-top: 6px;
+  }
+
+  .task-block {
+    font-size: 11px;
+    color: #e94560;
+    margin-top: 6px;
+    padding: 6px 10px;
+    background: rgba(233,69,96,0.08);
+    border-radius: 6px;
+    border-left: 3px solid #e94560;
+  }
+
+  .task-log {
+    font-size: 10px;
+    color: #555;
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px solid rgba(255,255,255,0.04);
+    font-family: monospace;
+    line-height: 1.6;
+    white-space: pre-line;
+  }
+
+  /* 底部 */
+  .footer {
+    text-align: center;
+    padding: 24px;
+    color: #333;
+    font-size: 12px;
+    border-top: 1px solid rgba(255,255,255,0.04);
+  }
+
+  .footer a {
+    color: #4895ef;
+    text-decoration: none;
+  }
+
+  /* 闪烁状态点 */
+  .live-dot {
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #2ec4b6;
+    margin-right: 6px;
+    animation: blink 1.5s ease-in-out infinite;
+  }
+
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+
+  /* 进度条 */
+  .progress-bar-container {
+    margin-top: 16px;
+    padding: 20px 40px 0;
+  }
+
+  .progress-bar-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    color: #666;
+    margin-bottom: 6px;
+  }
+
+  .progress-bar {
+    height: 6px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 3px;
+    overflow: hidden;
+    display: flex;
+  }
+
+  .progress-done { background: linear-gradient(90deg, #2ec4b6, #43aa8b); }
+  .progress-doing { background: linear-gradient(90deg, #4895ef, #4cc9f0); }
+  .progress-pending { background: linear-gradient(90deg, #f9c74f, #f4845f); }
+
+  /* 空状态 */
+  .empty-state {
+    text-align: center;
+    padding: 40px 20px;
+    color: #444;
+    font-size: 13px;
+  }
+
+  .empty-state .emoji { font-size: 32px; margin-bottom: 8px; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-left">
+    <div class="logo">🦞</div>
+    <div>
+      <h1>赛博任务看板</h1>
+      <div class="subtitle">CYBER LOBSTER TASK DASHBOARD · v4.0</div>
+    </div>
+  </div>
+  <div class="header-right">
+    <div class="update-time">LAST UPDATE: 2026-03-17 13:35 CST</div>
+    <div class="status-badge"><span class="live-dot"></span>系统运行中</div>
+  </div>
+</div>
+
+<!-- 进度条 -->
+<div class="progress-bar-container">
+  <div class="progress-bar-label">
+    <span>总体进度</span>
+    <span>1 完成 · 1 执行中 · 6 待处理</span>
+  </div>
+  <div class="progress-bar">
+    <div class="progress-done" style="width: 12.5%"></div>
+    <div class="progress-doing" style="width: 12.5%"></div>
+    <div class="progress-pending" style="width: 75%"></div>
+  </div>
+</div>
+
+<!-- 统计卡片 -->
+<div class="stats">
+  <div class="stat-card">
+    <div class="stat-number">8</div>
+    <div class="stat-label">总任务</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-number">1</div>
+    <div class="stat-label">执行中</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-number">6</div>
+    <div class="stat-label">待处理</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-number">1</div>
+    <div class="stat-label">已完成</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-number">3</div>
+    <div class="stat-label">P1 重要</div>
+  </div>
+</div>
+
+<!-- 看板主体 -->
+<div class="board">
+  <!-- 🔄 进行中 -->
+  <div class="column">
+    <div class="column-header">
+      🔄 进行中
+      <span class="column-count">1</span>
+    </div>
+    <div class="column-body">
+      <div class="task-card">
+        <div class="task-title">记忆系统优化</div>
+        <div class="task-meta">
+          <span class="tag tag-priority-p1">P1 重要</span>
+          <span class="tag tag-category">🔧 赛博系统</span>
+          <span class="tag tag-stage">⚡ 执行</span>
+        </div>
+        <div class="task-progress">MEMORY.md 瘦身 + AGENTS-HEARTBEAT.md 拆分</div>
+        <div class="task-log">[3/16] 启动诊断，识别优化方向
+[3/17] 写入自审机制到 AGENTS-HEARTBEAT.md</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ⏸️ 待处理 -->
+  <div class="column">
+    <div class="column-header">
+      ⏸️ 待处理
+      <span class="column-count">6</span>
+    </div>
+    <div class="column-body">
+      <div class="task-card">
+        <div class="task-title">百亿级曲库数据处理方案</div>
+        <div class="task-meta">
+          <span class="tag tag-priority-p1">P1 重要</span>
+          <span class="tag tag-category">💼 工作</span>
+          <span class="tag tag-stage">📋 规划</span>
+        </div>
+        <div class="task-progress">方案待落地</div>
+      </div>
+
+      <div class="task-card">
+        <div class="task-title">MBA 毕业论文选题与撰写</div>
+        <div class="task-meta">
+          <span class="tag tag-priority-p1">P1 重要</span>
+          <span class="tag tag-category">🎓 MBA</span>
+          <span class="tag tag-stage">📋 规划</span>
+        </div>
+        <div class="task-progress">待选题</div>
+      </div>
+
+      <div class="task-card">
+        <div class="task-title">技术博客/公众号开通</div>
+        <div class="task-meta">
+          <span class="tag tag-priority-p2">P2 普通</span>
+          <span class="tag tag-category">📝 内容创作</span>
+          <span class="tag tag-stage">📋 规划</span>
+        </div>
+        <div class="task-progress">待启动</div>
+      </div>
+
+      <div class="task-card">
+        <div class="task-title">AGENTS-HEARTBEAT.md 瘦身</div>
+        <div class="task-meta">
+          <span class="tag tag-priority-p2">P2 普通</span>
+          <span class="tag tag-category">🔧 赛博系统</span>
+          <span class="tag tag-stage">📋 规划</span>
+        </div>
+        <div class="task-progress">目标 25KB→5KB</div>
+      </div>
+
+      <div class="task-card">
+        <div class="task-title">抖音监控修复</div>
+        <div class="task-meta">
+          <span class="tag tag-priority-p2">P2 普通</span>
+          <span class="tag tag-category">🔧 赛博系统</span>
+          <span class="tag tag-stage">📋 规划</span>
+        </div>
+        <div class="task-block">⚠️ Chrome Relay 扩展连接问题，需登录方案</div>
+      </div>
+
+      <div class="task-card">
+        <div class="task-title">PDF 生成器依赖修复</div>
+        <div class="task-meta">
+          <span class="tag tag-priority-p3">P3 低优</span>
+          <span class="tag tag-category">🔧 赛博系统</span>
+          <span class="tag tag-stage">📋 规划</span>
+        </div>
+        <div class="task-block">⚠️ WeasyPrint 依赖问题，可选修复</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ✅ 已完成 -->
+  <div class="column">
+    <div class="column-header">
+      ✅ 已完成
+      <span class="column-count">1</span>
+    </div>
+    <div class="column-body">
+      <div class="task-card" style="opacity: 0.7;">
+        <div class="task-title">飞书任务看板上线</div>
+        <div class="task-meta">
+          <span class="tag tag-priority-p1">P1 重要</span>
+          <span class="tag tag-category">🔧 赛博系统</span>
+          <span class="tag tag-stage">🗄️ 归档</span>
+        </div>
+        <div class="task-progress">建表 + 字段设计 + 数据灌入 + v4.0 升级</div>
+        <div class="task-log">[11:00] 建表+字段设计
+[11:05] 灌入8条任务
+[11:06] 更新 task-tracker v3.0
+[13:30] 升级 v4.0：自审+阶段+日志</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="footer">
+  🦞 赛博任务看板 · Powered by OpenClaw · <a href="https://my.feishu.cn/base/SiSmbIs51a0JhbsEfAhcaNElnLb">飞书 Bitable 数据源</a>
+</div>
+
+</body>
+</html>

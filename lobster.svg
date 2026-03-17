@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <!-- Background -->
+  <circle cx="100" cy="100" r="95" fill="#FF6B35"/>
+  
+  <!-- Lobster Body -->
+  <ellipse cx="100" cy="110" rx="35" ry="45" fill="#E74C3C"/>
+  
+  <!-- Tail -->
+  <ellipse cx="100" cy="155" rx="25" ry="20" fill="#C0392B"/>
+  <ellipse cx="100" cy="170" rx="18" ry="12" fill="#A93226"/>
+  
+  <!-- Head -->
+  <ellipse cx="100" cy="65" rx="30" ry="25" fill="#E74C3C"/>
+  
+  <!-- Eyes -->
+  <circle cx="88" cy="55" r="8" fill="white"/>
+  <circle cx="112" cy="55" r="8" fill="white"/>
+  <circle cx="88" cy="55" r="4" fill="black"/>
+  <circle cx="112" cy="55" r="4" fill="black"/>
+  
+  <!-- Antennae -->
+  <path d="M 75 45 Q 50 20 30 30" stroke="#E74C3C" stroke-width="3" fill="none" stroke-linecap="round"/>
+  <path d="M 125 45 Q 150 20 170 30" stroke="#E74C3C" stroke-width="3" fill="none" stroke-linecap="round"/>
+  
+  <!-- Claws -->
+  <ellipse cx="55" cy="85" rx="20" ry="15" fill="#E74C3C" transform="rotate(-30 55 85)"/>
+  <ellipse cx="35" cy="70" rx="15" ry="20" fill="#C0392B" transform="rotate(-45 35 70)"/>
+  <ellipse cx="145" cy="85" rx="20" ry="15" fill="#E74C3C" transform="rotate(30 145 85)"/>
+  <ellipse cx="165" cy="70" rx="15" ry="20" fill="#C0392B" transform="rotate(45 165 70)"/>
+  
+  <!-- Legs -->
+  <line x1="70" y1="120" x2="50" y2="140" stroke="#E74C3C" stroke-width="4" stroke-linecap="round"/>
+  <line x1="75" y1="130" x2="55" y2="150" stroke="#E74C3C" stroke-width="4" stroke-linecap="round"/>
+  <line x1="130" y1="120" x2="150" y2="140" stroke="#E74C3C" stroke-width="4" stroke-linecap="round"/>
+  <line x1="125" y1="130" x2="145" y2="150" stroke="#E74C3C" stroke-width="4" stroke-linecap="round"/>
+  
+  <!-- Big Grin with Teeth -->
+  <path d="M 85 72 Q 100 95 115 72" fill="white" stroke="black" stroke-width="2"/>
+  <!-- Teeth lines -->
+  <line x1="92" y1="78" x2="92" y2="85" stroke="black" stroke-width="1"/>
+  <line x1="100" y1="82" x2="100" y2="90" stroke="black" stroke-width="1"/>
+  <line x1="108" y1="78" x2="108" y2="85" stroke="black" stroke-width="1"/>
+</svg>
