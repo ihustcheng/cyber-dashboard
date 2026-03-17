@@ -5,283 +5,222 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>🦞 赛博任务看板</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap');
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body {
-    font-family: 'Noto Sans SC', -apple-system, sans-serif;
-    background: #0a0a1a;
-    color: #e0e0e0;
-    min-height: 100vh;
-    overflow-x: hidden;
-  }
-  body::before {
-    content: '';
-    position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background: 
-      radial-gradient(ellipse at 20% 50%, rgba(233, 69, 96, 0.08) 0%, transparent 50%),
-      radial-gradient(ellipse at 80% 20%, rgba(72, 149, 239, 0.08) 0%, transparent 50%),
-      radial-gradient(ellipse at 50% 80%, rgba(76, 201, 240, 0.05) 0%, transparent 50%);
-    z-index: -1;
-    animation: bgPulse 8s ease-in-out infinite alternate;
-  }
-  @keyframes bgPulse { 0% { opacity: 0.6; } 100% { opacity: 1; } }
-  .header {
-    padding: 32px 40px 24px;
-    display: flex; align-items: center; justify-content: space-between;
-    border-bottom: 1px solid rgba(255,255,255,0.06);
-  }
-  .header-left { display: flex; align-items: center; gap: 16px; }
-  .logo { font-size: 48px; animation: float 3s ease-in-out infinite; }
-  @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
-  .header h1 {
-    font-size: 28px; font-weight: 700;
-    background: linear-gradient(135deg, #e94560, #4cc9f0);
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-    letter-spacing: 2px;
-  }
-  .header .subtitle { font-size: 13px; color: #666; margin-top: 4px; letter-spacing: 1px; }
-  .header-right { text-align: right; }
-  .update-time { font-size: 12px; color: #555; font-family: monospace; }
-  .status-badge {
-    display: inline-block; padding: 4px 12px; border-radius: 20px;
-    font-size: 11px; font-weight: 500; margin-top: 6px;
-    background: rgba(76, 201, 240, 0.15); color: #4cc9f0;
-    border: 1px solid rgba(76, 201, 240, 0.3);
-    animation: pulse 2s ease-in-out infinite;
-  }
-  @keyframes pulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(76, 201, 240, 0.2); } 50% { box-shadow: 0 0 12px 4px rgba(76, 201, 240, 0.15); } }
-  .stats {
-    display: grid; grid-template-columns: repeat(5, 1fr);
-    gap: 16px; padding: 24px 40px;
-  }
-  .stat-card {
-    background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06);
-    border-radius: 16px; padding: 20px; text-align: center;
-    transition: all 0.3s ease; position: relative; overflow: hidden;
-  }
-  .stat-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; border-radius: 16px 16px 0 0; }
-  .stat-card:nth-child(1)::before { background: linear-gradient(90deg, #e94560, #ff6b6b); }
-  .stat-card:nth-child(2)::before { background: linear-gradient(90deg, #4895ef, #4cc9f0); }
-  .stat-card:nth-child(3)::before { background: linear-gradient(90deg, #f9c74f, #f4845f); }
-  .stat-card:nth-child(4)::before { background: linear-gradient(90deg, #2ec4b6, #43aa8b); }
-  .stat-card:nth-child(5)::before { background: linear-gradient(90deg, #7b2ff7, #c084fc); }
-  .stat-card:hover { transform: translateY(-4px); border-color: rgba(255,255,255,0.12); box-shadow: 0 8px 32px rgba(0,0,0,0.3); }
-  .stat-number { font-size: 36px; font-weight: 900; line-height: 1; margin-bottom: 6px; }
-  .stat-card:nth-child(1) .stat-number { color: #e94560; }
-  .stat-card:nth-child(2) .stat-number { color: #4cc9f0; }
-  .stat-card:nth-child(3) .stat-number { color: #f9c74f; }
-  .stat-card:nth-child(4) .stat-number { color: #2ec4b6; }
-  .stat-card:nth-child(5) .stat-number { color: #c084fc; }
-  .stat-label { font-size: 12px; color: #888; text-transform: uppercase; letter-spacing: 2px; }
-  .progress-bar-container { margin-top: 16px; padding: 20px 40px 0; }
-  .progress-bar-label { display: flex; justify-content: space-between; font-size: 11px; color: #666; margin-bottom: 6px; }
-  .progress-bar { height: 6px; background: rgba(255,255,255,0.05); border-radius: 3px; overflow: hidden; display: flex; }
-  .progress-done { background: linear-gradient(90deg, #2ec4b6, #43aa8b); }
-  .progress-doing { background: linear-gradient(90deg, #4895ef, #4cc9f0); }
-  .progress-pending { background: linear-gradient(90deg, #f9c74f, #f4845f); }
-  .board {
-    display: grid; grid-template-columns: repeat(3, 1fr);
-    gap: 20px; padding: 8px 40px 40px;
-  }
-  .column {
-    background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05);
-    border-radius: 16px; overflow: hidden;
-  }
-  .column-header {
-    padding: 16px 20px; font-size: 14px; font-weight: 600; letter-spacing: 1px;
-    display: flex; align-items: center; justify-content: space-between;
-    border-bottom: 1px solid rgba(255,255,255,0.05);
-  }
-  .column:nth-child(1) .column-header { background: linear-gradient(135deg, rgba(233,69,96,0.12), rgba(233,69,96,0.03)); color: #e94560; }
-  .column:nth-child(2) .column-header { background: linear-gradient(135deg, rgba(72,149,239,0.12), rgba(72,149,239,0.03)); color: #4895ef; }
-  .column:nth-child(3) .column-header { background: linear-gradient(135deg, rgba(46,196,182,0.12), rgba(46,196,182,0.03)); color: #2ec4b6; }
-  .column-count { background: rgba(255,255,255,0.1); border-radius: 10px; padding: 2px 10px; font-size: 12px; }
-  .column-body { padding: 12px; display: flex; flex-direction: column; gap: 10px; min-height: 200px; }
-  .task-card {
-    background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.06);
-    border-radius: 12px; padding: 16px; transition: all 0.3s ease; cursor: default;
-  }
-  .task-card:hover {
-    background: rgba(255,255,255,0.07); border-color: rgba(255,255,255,0.12);
-    transform: translateX(4px); box-shadow: 0 4px 20px rgba(0,0,0,0.2);
-  }
-  .task-title { font-size: 14px; font-weight: 600; margin-bottom: 8px; color: #f0f0f0; }
-  .task-meta { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 8px; }
-  .tag { display: inline-block; padding: 2px 8px; border-radius: 6px; font-size: 10px; font-weight: 500; letter-spacing: 0.5px; }
-  .tag-priority-p0 { background: rgba(233,69,96,0.2); color: #ff6b6b; border: 1px solid rgba(233,69,96,0.3); }
-  .tag-priority-p1 { background: rgba(255,159,67,0.2); color: #ffa94d; border: 1px solid rgba(255,159,67,0.3); }
-  .tag-priority-p2 { background: rgba(249,199,79,0.2); color: #f9c74f; border: 1px solid rgba(249,199,79,0.3); }
-  .tag-priority-p3 { background: rgba(46,196,182,0.2); color: #2ec4b6; border: 1px solid rgba(46,196,182,0.3); }
-  .tag-category { background: rgba(123,47,247,0.15); color: #c084fc; border: 1px solid rgba(123,47,247,0.2); }
-  .tag-stage { background: rgba(72,149,239,0.15); color: #74b9ff; border: 1px solid rgba(72,149,239,0.2); }
-  .task-progress { font-size: 11px; color: #777; line-height: 1.5; margin-top: 6px; }
-  .task-block {
-    font-size: 11px; color: #e94560; margin-top: 6px;
-    padding: 6px 10px; background: rgba(233,69,96,0.08);
-    border-radius: 6px; border-left: 3px solid #e94560;
-  }
-  .task-log {
-    font-size: 10px; color: #555; margin-top: 8px; padding-top: 8px;
-    border-top: 1px solid rgba(255,255,255,0.04);
-    font-family: monospace; line-height: 1.6; white-space: pre-line;
-  }
-  .footer {
-    text-align: center; padding: 24px; color: #333; font-size: 12px;
-    border-top: 1px solid rgba(255,255,255,0.04);
-  }
-  .footer a { color: #4895ef; text-decoration: none; }
-  .live-dot {
-    display: inline-block; width: 6px; height: 6px; border-radius: 50%;
-    background: #2ec4b6; margin-right: 6px; animation: blink 1.5s ease-in-out infinite;
-  }
-  @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
-  .empty-state { text-align: center; padding: 40px 20px; color: #444; font-size: 13px; }
-  .empty-state .emoji { font-size: 32px; margin-bottom: 8px; }
-  @media (max-width: 900px) {
-    .stats { grid-template-columns: repeat(3, 1fr); }
-    .board { grid-template-columns: 1fr; }
-    .header { flex-direction: column; gap: 12px; text-align: center; }
-    .header-right { text-align: center; }
-  }
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap');
+*{margin:0;padding:0;box-sizing:border-box}
+body{
+  font-family:'Noto Sans SC',-apple-system,sans-serif;
+  background:#0a0a1a;color:#e0e0e0;min-height:100vh;
+}
+body::before{
+  content:'';position:fixed;top:0;left:0;right:0;bottom:0;
+  background:radial-gradient(ellipse at 20% 50%,rgba(233,69,96,.08) 0%,transparent 50%),
+    radial-gradient(ellipse at 80% 20%,rgba(72,149,239,.08) 0%,transparent 50%),
+    radial-gradient(ellipse at 50% 80%,rgba(76,201,240,.05) 0%,transparent 50%);
+  z-index:-1;animation:bgP 8s ease-in-out infinite alternate;
+}
+@keyframes bgP{0%{opacity:.6}100%{opacity:1}}
+
+/* Header */
+.header{padding:28px 40px 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,.06)}
+.header-l{display:flex;align-items:center;gap:14px}
+.logo{font-size:44px;animation:fl 3s ease-in-out infinite}
+@keyframes fl{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+.header h1{font-size:26px;font-weight:700;background:linear-gradient(135deg,#e94560,#4cc9f0);-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:2px}
+.subtitle{font-size:12px;color:#555;margin-top:3px;letter-spacing:1px}
+.header-r{text-align:right}
+.update-time{font-size:11px;color:#444;font-family:monospace}
+.badge{display:inline-block;padding:3px 10px;border-radius:20px;font-size:10px;font-weight:500;margin-top:5px;background:rgba(76,201,240,.15);color:#4cc9f0;border:1px solid rgba(76,201,240,.3);animation:pul 2s ease-in-out infinite}
+@keyframes pul{0%,100%{box-shadow:0 0 0 0 rgba(76,201,240,.2)}50%{box-shadow:0 0 10px 3px rgba(76,201,240,.15)}}
+.dot{display:inline-block;width:5px;height:5px;border-radius:50%;background:#2ec4b6;margin-right:5px;animation:bk 1.5s ease-in-out infinite}
+@keyframes bk{0%,100%{opacity:1}50%{opacity:.3}}
+
+/* Stats */
+.stats{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;padding:20px 40px}
+.stat{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:14px;padding:16px;text-align:center;transition:all .3s;position:relative;overflow:hidden}
+.stat::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;border-radius:14px 14px 0 0}
+.stat:nth-child(1)::before{background:linear-gradient(90deg,#e94560,#ff6b6b)}
+.stat:nth-child(2)::before{background:linear-gradient(90deg,#4895ef,#4cc9f0)}
+.stat:nth-child(3)::before{background:linear-gradient(90deg,#f9c74f,#f4845f)}
+.stat:nth-child(4)::before{background:linear-gradient(90deg,#2ec4b6,#43aa8b)}
+.stat:nth-child(5)::before{background:linear-gradient(90deg,#7b2ff7,#c084fc)}
+.stat:hover{transform:translateY(-3px);border-color:rgba(255,255,255,.12);box-shadow:0 6px 24px rgba(0,0,0,.3)}
+.stat-n{font-size:32px;font-weight:900;line-height:1;margin-bottom:4px}
+.stat:nth-child(1) .stat-n{color:#e94560}
+.stat:nth-child(2) .stat-n{color:#4cc9f0}
+.stat:nth-child(3) .stat-n{color:#f9c74f}
+.stat:nth-child(4) .stat-n{color:#2ec4b6}
+.stat:nth-child(5) .stat-n{color:#c084fc}
+.stat-l{font-size:11px;color:#777;text-transform:uppercase;letter-spacing:2px}
+
+/* Progress */
+.prog-wrap{padding:16px 40px 0}
+.prog-info{display:flex;justify-content:space-between;font-size:10px;color:#555;margin-bottom:5px}
+.prog{height:5px;background:rgba(255,255,255,.05);border-radius:3px;overflow:hidden;display:flex}
+.prog-done{background:linear-gradient(90deg,#2ec4b6,#43aa8b)}
+.prog-doing{background:linear-gradient(90deg,#4895ef,#4cc9f0)}
+.prog-pend{background:linear-gradient(90deg,#f9c74f,#f4845f)}
+
+/* Tabs */
+.tabs{display:flex;gap:6px;padding:20px 40px 0;flex-wrap:wrap}
+.tab{
+  padding:8px 18px;border-radius:10px;border:1px solid rgba(255,255,255,.08);
+  background:rgba(255,255,255,.03);color:#888;font-size:13px;font-weight:500;
+  cursor:pointer;transition:all .25s;display:flex;align-items:center;gap:6px;
+}
+.tab:hover{background:rgba(255,255,255,.06);color:#ccc;border-color:rgba(255,255,255,.15)}
+.tab.active{
+  background:rgba(var(--tab-r,76),var(--tab-g,201),var(--tab-b,240),.12);
+  color:var(--tab-color,#4cc9f0);
+  border-color:var(--tab-color,#4cc9f0);
+  box-shadow:0 0 12px rgba(76,201,240,.1);
+}
+.tab-count{
+  background:rgba(255,255,255,.1);border-radius:8px;
+  padding:1px 7px;font-size:11px;font-weight:700;
+}
+.tab.active .tab-count{background:rgba(255,255,255,.15)}
+
+/* Tab panels */
+.tab-panel{display:none;padding:12px 40px 32px}
+.tab-panel.active{display:block;animation:fadeIn .3s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+/* Board */
+.board{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.col{background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.05);border-radius:14px;overflow:hidden}
+.col-head{
+  padding:14px 18px;font-size:13px;font-weight:600;letter-spacing:1px;
+  display:flex;align-items:center;justify-content:space-between;
+  border-bottom:1px solid rgba(255,255,255,.05);
+}
+.col-doing{background:linear-gradient(135deg,rgba(233,69,96,.1),rgba(233,69,96,.02));color:#e94560}
+.col-pending{background:linear-gradient(135deg,rgba(72,149,239,.1),rgba(72,149,239,.02));color:#4895ef}
+.col-done{background:linear-gradient(135deg,rgba(46,196,182,.1),rgba(46,196,182,.02));color:#2ec4b6}
+.cnt{background:rgba(255,255,255,.1);border-radius:8px;padding:1px 8px;font-size:11px}
+.col-body{padding:10px;display:flex;flex-direction:column;gap:8px;min-height:160px}
+
+/* Cards */
+.card{
+  background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06);
+  border-radius:10px;padding:14px;transition:all .25s;
+}
+.card:hover{
+  background:rgba(255,255,255,.07);border-color:rgba(255,255,255,.12);
+  transform:translateX(3px);box-shadow:0 3px 16px rgba(0,0,0,.2);
+}
+.card-title{font-size:13px;font-weight:600;margin-bottom:6px;color:#f0f0f0}
+.card-tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:6px}
+.tag{display:inline-block;padding:2px 7px;border-radius:5px;font-size:9px;font-weight:500;letter-spacing:.3px}
+.tag-p0{background:rgba(233,69,96,.2);color:#ff6b6b;border:1px solid rgba(233,69,96,.3)}
+.tag-p1{background:rgba(255,159,67,.2);color:#ffa94d;border:1px solid rgba(255,159,67,.3)}
+.tag-p2{background:rgba(249,199,79,.2);color:#f9c74f;border:1px solid rgba(249,199,79,.3)}
+.tag-p3{background:rgba(46,196,182,.2);color:#2ec4b6;border:1px solid rgba(46,196,182,.3)}
+.tag-stage{background:rgba(72,149,239,.12);color:#74b9ff;border:1px solid rgba(72,149,239,.2)}
+.card-desc{font-size:11px;color:#777;line-height:1.5;margin-top:4px}
+.card-block{
+  font-size:10px;color:#e94560;margin-top:5px;padding:5px 9px;
+  background:rgba(233,69,96,.08);border-radius:5px;border-left:3px solid #e94560;
+}
+.card-log{
+  font-size:9px;color:#4a4a4a;margin-top:6px;padding-top:6px;
+  border-top:1px solid rgba(255,255,255,.04);
+  font-family:monospace;line-height:1.5;white-space:pre-line;
+}
+.empty{text-align:center;padding:32px 16px;color:#3a3a3a;font-size:12px}
+.footer{text-align:center;padding:20px;color:#2a2a2a;font-size:11px;border-top:1px solid rgba(255,255,255,.03)}
+
+@media(max-width:900px){
+  .stats{grid-template-columns:repeat(3,1fr)}
+  .board{grid-template-columns:1fr}
+  .header{flex-direction:column;gap:10px;text-align:center}
+  .header-r{text-align:center}
+  .tabs{justify-content:center}
+  .tab-panel{padding:12px 16px 32px}
+}
 </style>
 </head>
 <body>
 
 <div class="header">
-  <div class="header-left">
+  <div class="header-l">
     <div class="logo">🦞</div>
     <div>
       <h1>赛博任务看板</h1>
-      <div class="subtitle">CYBER LOBSTER TASK DASHBOARD · v4.0</div>
+      <div class="subtitle">CYBER LOBSTER · TASK DASHBOARD v4.1</div>
     </div>
   </div>
-  <div class="header-right">
-    <div class="update-time">LAST UPDATE: 2026-03-17 14:27 CST</div>
-    <div class="status-badge"><span class="live-dot"></span>系统运行中</div>
+  <div class="header-r">
+    <div class="update-time">LAST UPDATE: 2026-03-17 14:30 CST</div>
+    <div class="badge"><span class="dot"></span>ONLINE</div>
   </div>
 </div>
 
-<div class="progress-bar-container">
-  <div class="progress-bar-label">
-    <span>总体进度</span>
-    <span>1 完成 · 2 执行中 · 6 待处理</span>
-  </div>
-  <div class="progress-bar">
-    <div class="progress-done" style="width: 11%"></div>
-    <div class="progress-doing" style="width: 22%"></div>
-    <div class="progress-pending" style="width: 67%"></div>
+<div class="prog-wrap">
+  <div class="prog-info"><span>总体进度</span><span>1 完成 · 2 执行中 · 6 待处理</span></div>
+  <div class="prog">
+    <div class="prog-done" style="width:11%"></div>
+    <div class="prog-doing" style="width:22%"></div>
+    <div class="prog-pend" style="width:67%"></div>
   </div>
 </div>
 
 <div class="stats">
-  <div class="stat-card"><div class="stat-number">9</div><div class="stat-label">总任务</div></div>
-  <div class="stat-card"><div class="stat-number">2</div><div class="stat-label">执行中</div></div>
-  <div class="stat-card"><div class="stat-number">6</div><div class="stat-label">待处理</div></div>
-  <div class="stat-card"><div class="stat-number">1</div><div class="stat-label">已完成</div></div>
-  <div class="stat-card"><div class="stat-number">5</div><div class="stat-label">P0/P1</div></div>
+  <div class="stat"><div class="stat-n">9</div><div class="stat-l">总任务</div></div>
+  <div class="stat"><div class="stat-n">2</div><div class="stat-l">执行中</div></div>
+  <div class="stat"><div class="stat-n">6</div><div class="stat-l">待处理</div></div>
+  <div class="stat"><div class="stat-n">1</div><div class="stat-l">已完成</div></div>
+  <div class="stat"><div class="stat-n">5</div><div class="stat-l">P0/P1</div></div>
 </div>
 
-<div class="board">
-  <div class="column">
-    <div class="column-header">🔄 进行中<span class="column-count">2</span></div>
-    <div class="column-body"><div class="task-card" >
-  <div class="task-title">找施旸当面聊 MOB 画像采买服务</div>
-  <div class="task-meta">
-    <span class="tag tag-priority-p1">P1 重要</span>
-    <span class="tag tag-category">💼 工作</span>
-    <span class="tag tag-stage">⚡ 执行</span>
-  </div>
-  <div class="task-progress">已约今天聊。广告负责人：施旸</div>
-  <div class="task-log">[3/17 14:26] 从微信聊天记录截图录入</div>
-</div>
-<div class="task-card" >
-  <div class="task-title">记忆系统优化</div>
-  <div class="task-meta">
-    <span class="tag tag-priority-p1">P1 重要</span>
-    <span class="tag tag-category">🔧 赛博系统</span>
-    <span class="tag tag-stage">⚡ 执行</span>
-  </div>
-  <div class="task-progress">MEMORY.md 瘦身 + AGENTS-HEARTBEAT.md 拆分</div>
-  <div class="task-log">[3/16] 启动诊断
-[3/17] 写入自审机制</div>
-</div></div>
-  </div>
-  <div class="column">
-    <div class="column-header">⏸️ 待处理<span class="column-count">6</span></div>
-    <div class="column-body"><div class="task-card" >
-  <div class="task-title">百亿级曲库数据处理方案</div>
-  <div class="task-meta">
-    <span class="tag tag-priority-p1">P1 重要</span>
-    <span class="tag tag-category">💼 工作</span>
-    <span class="tag tag-stage">📋 规划</span>
-  </div>
-  <div class="task-progress">方案待落地</div>
-</div>
-<div class="task-card" >
-  <div class="task-title">MBA 毕业论文选题与撰写</div>
-  <div class="task-meta">
-    <span class="tag tag-priority-p1">P1 重要</span>
-    <span class="tag tag-category">🎓 MBA</span>
-    <span class="tag tag-stage">📋 规划</span>
-  </div>
-  <div class="task-progress">待选题</div>
-</div>
-<div class="task-card" >
-  <div class="task-title">技术博客/公众号开通</div>
-  <div class="task-meta">
-    <span class="tag tag-priority-p2">P2 普通</span>
-    <span class="tag tag-category">📝 内容创作</span>
-    <span class="tag tag-stage">📋 规划</span>
-  </div>
-  <div class="task-progress">待启动</div>
-</div>
-<div class="task-card" >
-  <div class="task-title">AGENTS-HEARTBEAT.md 瘦身</div>
-  <div class="task-meta">
-    <span class="tag tag-priority-p2">P2 普通</span>
-    <span class="tag tag-category">🔧 赛博系统</span>
-    <span class="tag tag-stage">📋 规划</span>
-  </div>
-  <div class="task-progress">目标 25KB→5KB</div>
-</div>
-<div class="task-card" >
-  <div class="task-title">抖音监控修复</div>
-  <div class="task-meta">
-    <span class="tag tag-priority-p2">P2 普通</span>
-    <span class="tag tag-category">🔧 赛博系统</span>
-    <span class="tag tag-stage">📋 规划</span>
-  </div>
-  <div class="task-block">⚠️ Chrome Relay 扩展连接问题</div>
-</div>
-<div class="task-card" >
-  <div class="task-title">PDF 生成器依赖修复</div>
-  <div class="task-meta">
-    <span class="tag tag-priority-p3">P3 低优</span>
-    <span class="tag tag-category">🔧 赛博系统</span>
-    <span class="tag tag-stage">📋 规划</span>
-  </div>
-  <div class="task-block">⚠️ WeasyPrint 依赖问题</div>
-</div></div>
-  </div>
-  <div class="column">
-    <div class="column-header">✅ 已完成<span class="column-count">1</span></div>
-    <div class="column-body"><div class="task-card" style="opacity: 0.7;">
-  <div class="task-title">飞书任务看板上线</div>
-  <div class="task-meta">
-    <span class="tag tag-priority-p1">P1 重要</span>
-    <span class="tag tag-category">🔧 赛博系统</span>
-    <span class="tag tag-stage">🗄️ 归档</span>
-  </div>
-  <div class="task-progress">v4.0 完成</div>
-  <div class="task-log">[11:00] 建表
+<div class="tabs"><button class="tab active" data-tab="all" style="--tab-color: #4cc9f0">📊 全部 <span class="tab-count">9</span></button>
+<button class="tab" data-tab="work工作" style="--tab-color: #e94560">💼 工作 <span class="tab-count">2</span></button>
+<button class="tab" data-tab="mbaMBA" style="--tab-color: #7b2ff7">🎓 MBA <span class="tab-count">1</span></button>
+<button class="tab" data-tab="sys赛博系统" style="--tab-color: #4895ef">🔧 赛博系统 <span class="tab-count">4</span></button>
+<button class="tab" data-tab="content内容创作" style="--tab-color: #2ec4b6">📝 内容创作 <span class="tab-count">1</span></button></div>
+<div class="tab-panel active" id="tab-all"><div class="board">
+<div class="col"><div class="col-head col-doing">🔄 进行中 <span class="cnt">2</span></div><div class="col-body"><div class="card" ><div class="card-title">找施旸当面聊 MOB 画像采买服务</div><div class="card-tags"><span class="tag tag-p1">P1 重要</span><span class="tag tag-stage">⚡ 执行</span></div><div class="card-desc">已约今天聊。广告负责人：施旸</div><div class="card-log">[3/17 14:26] 从微信聊天记录截图录入</div></div><div class="card" ><div class="card-title">记忆系统优化</div><div class="card-tags"><span class="tag tag-p1">P1 重要</span><span class="tag tag-stage">⚡ 执行</span></div><div class="card-desc">MEMORY.md 瘦身 + AGENTS-HEARTBEAT.md 拆分</div><div class="card-log">[3/16] 启动诊断
+[3/17] 写入自审机制</div></div></div></div>
+<div class="col"><div class="col-head col-pending">⏸️ 待处理 <span class="cnt">6</span></div><div class="col-body"><div class="card" ><div class="card-title">百亿级曲库数据处理方案</div><div class="card-tags"><span class="tag tag-p1">P1 重要</span><span class="tag tag-stage">📋 规划</span></div><div class="card-desc">方案待落地</div></div><div class="card" ><div class="card-title">MBA 毕业论文选题与撰写</div><div class="card-tags"><span class="tag tag-p1">P1 重要</span><span class="tag tag-stage">📋 规划</span></div><div class="card-desc">待选题</div></div><div class="card" ><div class="card-title">技术博客/公众号开通</div><div class="card-tags"><span class="tag tag-p2">P2 普通</span><span class="tag tag-stage">📋 规划</span></div><div class="card-desc">待启动</div></div><div class="card" ><div class="card-title">AGENTS-HEARTBEAT.md 瘦身</div><div class="card-tags"><span class="tag tag-p2">P2 普通</span><span class="tag tag-stage">📋 规划</span></div><div class="card-desc">目标 25KB→5KB</div></div><div class="card" ><div class="card-title">抖音监控修复</div><div class="card-tags"><span class="tag tag-p2">P2 普通</span><span class="tag tag-stage">📋 规划</span></div><div class="card-block">⚠️ Chrome Relay 扩展连接问题</div></div><div class="card" ><div class="card-title">PDF 生成器依赖修复</div><div class="card-tags"><span class="tag tag-p3">P3 低优</span><span class="tag tag-stage">📋 规划</span></div><div class="card-block">⚠️ WeasyPrint 依赖问题</div></div></div></div>
+<div class="col"><div class="col-head col-done">✅ 已完成 <span class="cnt">1</span></div><div class="col-body"><div class="card" style="opacity: 0.6;"><div class="card-title">飞书任务看板上线</div><div class="card-tags"><span class="tag tag-p1">P1 重要</span><span class="tag tag-stage">🗄️ 归档</span></div><div class="card-desc">v4.0 完成</div><div class="card-log">[11:00] 建表
 [13:30] v4.0 升级
-[13:58] GitHub Pages 上线</div>
+[13:58] GitHub Pages 上线</div></div></div></div>
 </div></div>
-  </div>
-</div>
+<div class="tab-panel" id="tab-work工作"><div class="board">
+<div class="col"><div class="col-head col-doing">🔄 进行中 <span class="cnt">1</span></div><div class="col-body"><div class="card" ><div class="card-title">找施旸当面聊 MOB 画像采买服务</div><div class="card-tags"><span class="tag tag-p1">P1 重要</span><span class="tag tag-stage">⚡ 执行</span></div><div class="card-desc">已约今天聊。广告负责人：施旸</div><div class="card-log">[3/17 14:26] 从微信聊天记录截图录入</div></div></div></div>
+<div class="col"><div class="col-head col-pending">⏸️ 待处理 <span class="cnt">1</span></div><div class="col-body"><div class="card" ><div class="card-title">百亿级曲库数据处理方案</div><div class="card-tags"><span class="tag tag-p1">P1 重要</span><span class="tag tag-stage">📋 规划</span></div><div class="card-desc">方案待落地</div></div></div></div>
+<div class="col"><div class="col-head col-done">✅ 已完成 <span class="cnt">0</span></div><div class="col-body"><div class="empty">📭 暂无</div></div></div>
+</div></div>
+<div class="tab-panel" id="tab-mbaMBA"><div class="board">
+<div class="col"><div class="col-head col-doing">🔄 进行中 <span class="cnt">0</span></div><div class="col-body"><div class="empty">🎯 暂无</div></div></div>
+<div class="col"><div class="col-head col-pending">⏸️ 待处理 <span class="cnt">1</span></div><div class="col-body"><div class="card" ><div class="card-title">MBA 毕业论文选题与撰写</div><div class="card-tags"><span class="tag tag-p1">P1 重要</span><span class="tag tag-stage">📋 规划</span></div><div class="card-desc">待选题</div></div></div></div>
+<div class="col"><div class="col-head col-done">✅ 已完成 <span class="cnt">0</span></div><div class="col-body"><div class="empty">📭 暂无</div></div></div>
+</div></div>
+<div class="tab-panel" id="tab-sys赛博系统"><div class="board">
+<div class="col"><div class="col-head col-doing">🔄 进行中 <span class="cnt">1</span></div><div class="col-body"><div class="card" ><div class="card-title">记忆系统优化</div><div class="card-tags"><span class="tag tag-p1">P1 重要</span><span class="tag tag-stage">⚡ 执行</span></div><div class="card-desc">MEMORY.md 瘦身 + AGENTS-HEARTBEAT.md 拆分</div><div class="card-log">[3/16] 启动诊断
+[3/17] 写入自审机制</div></div></div></div>
+<div class="col"><div class="col-head col-pending">⏸️ 待处理 <span class="cnt">3</span></div><div class="col-body"><div class="card" ><div class="card-title">AGENTS-HEARTBEAT.md 瘦身</div><div class="card-tags"><span class="tag tag-p2">P2 普通</span><span class="tag tag-stage">📋 规划</span></div><div class="card-desc">目标 25KB→5KB</div></div><div class="card" ><div class="card-title">抖音监控修复</div><div class="card-tags"><span class="tag tag-p2">P2 普通</span><span class="tag tag-stage">📋 规划</span></div><div class="card-block">⚠️ Chrome Relay 扩展连接问题</div></div><div class="card" ><div class="card-title">PDF 生成器依赖修复</div><div class="card-tags"><span class="tag tag-p3">P3 低优</span><span class="tag tag-stage">📋 规划</span></div><div class="card-block">⚠️ WeasyPrint 依赖问题</div></div></div></div>
+<div class="col"><div class="col-head col-done">✅ 已完成 <span class="cnt">1</span></div><div class="col-body"><div class="card" style="opacity: 0.6;"><div class="card-title">飞书任务看板上线</div><div class="card-tags"><span class="tag tag-p1">P1 重要</span><span class="tag tag-stage">🗄️ 归档</span></div><div class="card-desc">v4.0 完成</div><div class="card-log">[11:00] 建表
+[13:30] v4.0 升级
+[13:58] GitHub Pages 上线</div></div></div></div>
+</div></div>
+<div class="tab-panel" id="tab-content内容创作"><div class="board">
+<div class="col"><div class="col-head col-doing">🔄 进行中 <span class="cnt">0</span></div><div class="col-body"><div class="empty">🎯 暂无</div></div></div>
+<div class="col"><div class="col-head col-pending">⏸️ 待处理 <span class="cnt">1</span></div><div class="col-body"><div class="card" ><div class="card-title">技术博客/公众号开通</div><div class="card-tags"><span class="tag tag-p2">P2 普通</span><span class="tag tag-stage">📋 规划</span></div><div class="card-desc">待启动</div></div></div></div>
+<div class="col"><div class="col-head col-done">✅ 已完成 <span class="cnt">0</span></div><div class="col-body"><div class="empty">📭 暂无</div></div></div>
+</div></div>
 
 <div class="footer">🦞 赛博任务看板 · Powered by OpenClaw</div>
+
+<script>
+document.querySelectorAll('.tab').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('tab-'+btn.dataset.tab).classList.add('active');
+  });
+});
+</script>
 
 </body>
 </html>
