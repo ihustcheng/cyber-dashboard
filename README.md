@@ -6,7 +6,7 @@
 
 ## 🔗 在线访问
 
-👉 **https://iiiijoker.github.io/cyber-dashboard**
+👉 **https://ihustcheng.github.io/cyber-dashboard**
 
 ## 架构
 
