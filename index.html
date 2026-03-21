@@ -352,7 +352,7 @@ body::before {
 .pie {
   width: 100px; height: 100px;
   border-radius: 50%;
-  background: conic-gradient(#888 0% 100%);
+  background: conic-gradient(#e94560 0% 29%, #4895ef 29% 58%, #f4845f 58% 72%, #7b2ff7 72% 86%, #2ec4b6 86% 100%);
   flex-shrink: 0;
   position: relative;
 }
@@ -578,7 +578,7 @@ body::before {
     </div>
   </div>
   <div class="header-r">
-    <div class="update-time">2026-03-21 21:32 CST</div>
+    <div class="update-time">2026-03-21 21:45 CST</div>
     <div class="badge"><span class="dot"></span>ONLINE</div>
   </div>
 </div>
@@ -599,19 +599,19 @@ body::before {
     <div class="agent-stats">
       <div class="agent-stat">
         <div class="agent-stat-label">执行中</div>
-        <div class="agent-stat-value" style="color:#4cc9f0">2</div>
+        <div class="agent-stat-value" style="color:#4cc9f0">1</div>
       </div>
       <div class="agent-stat">
         <div class="agent-stat-label">待处理</div>
-        <div class="agent-stat-value" style="color:#f9c74f">2</div>
+        <div class="agent-stat-value" style="color:#f9c74f">6</div>
       </div>
       <div class="agent-stat">
         <div class="agent-stat-label">已完成</div>
-        <div class="agent-stat-value" style="color:#2ec4b6">4</div>
+        <div class="agent-stat-value" style="color:#2ec4b6">6</div>
       </div>
       <div class="agent-stat">
         <div class="agent-stat-label">P0/P1</div>
-        <div class="agent-stat-value" style="color:#e94560">0</div>
+        <div class="agent-stat-value" style="color:#e94560">8</div>
       </div>
     </div>
     <div class="agent-current">
@@ -623,7 +623,7 @@ body::before {
   <!-- 活动时间线 -->
   <div class="timeline-card">
     <div class="section-title">⚡ 最近活动</div>
-    <div class="activities"><div class="activity-empty">暂无活动记录</div></div>
+    <div class="activities"><div class="activity"><span class="act-icon">✅</span><div class="act-body"><span class="act-time">3/21</span><span class="act-text">Task Tracker v6 重构: 需求文档+设计文档</span></div></div><div class="activity"><span class="act-icon">✅</span><div class="act-body"><span class="act-time">3/21</span><span class="act-text">Task Tracker v6 重构: Coder实现阶段1-4</span></div></div><div class="activity"><span class="act-icon">✅</span><div class="act-body"><span class="act-time">3/21</span><span class="act-text">Task Tracker v6 重构: 全量验证通过</span></div></div><div class="activity"><span class="act-icon">🔧</span><div class="act-body"><span class="act-time">3/19</span><span class="act-text">投资顾问 Agent 团队: 数据源验证5个</span></div></div><div class="activity"><span class="act-icon">🔧</span><div class="act-body"><span class="act-time">3/19</span><span class="act-text">投资顾问 Agent 团队: 六步全自动 &lt;3秒</span></div></div><div class="activity"><span class="act-icon">🔧</span><div class="act-body"><span class="act-time">3/19</span><span class="act-text">投资顾问 Agent 团队: screener.py+Cron上线</span></div></div><div class="activity"><span class="act-icon">🔧</span><div class="act-body"><span class="act-time">3/19</span><span class="act-text">投资顾问 Agent 团队: 卖出提醒Cron上线</span></div></div><div class="activity"><span class="act-icon">✅</span><div class="act-body"><span class="act-time">3/19</span><span class="act-text">记忆系统优化: 全部完成</span></div></div></div>
   </div>
 
   <!-- 统计图表 -->
@@ -631,15 +631,15 @@ body::before {
     <div class="section-title">📊 任务分布</div>
     <div class="pie-container">
       <div class="pie"></div>
-      <div class="legend"><div class="legend-item"><span class="legend-dot" style="background:#888"></span> <span class="legend-n">4</span></div></div>
+      <div class="legend"><div class="legend-item"><span class="legend-dot" style="background:#e94560"></span>💼 工作 <span class="legend-n">2</span></div><div class="legend-item"><span class="legend-dot" style="background:#4895ef"></span>🔧 赛博系统 <span class="legend-n">2</span></div><div class="legend-item"><span class="legend-dot" style="background:#f4845f"></span>💻 技术探索 <span class="legend-n">1</span></div><div class="legend-item"><span class="legend-dot" style="background:#7b2ff7"></span>🎓 MBA <span class="legend-n">1</span></div><div class="legend-item"><span class="legend-dot" style="background:#2ec4b6"></span>📝 内容创作 <span class="legend-n">1</span></div></div>
     </div>
     <div class="mini-stats">
       <div class="mini-stat">
-        <div class="mini-stat-n" style="color:#e94560">8</div>
+        <div class="mini-stat-n" style="color:#e94560">13</div>
         <div class="mini-stat-l">总任务</div>
       </div>
       <div class="mini-stat">
-        <div class="mini-stat-n" style="color:#2ec4b6">50%</div>
+        <div class="mini-stat-n" style="color:#2ec4b6">46%</div>
         <div class="mini-stat-l">完成率</div>
       </div>
     </div>
@@ -651,20 +651,52 @@ body::before {
 <div class="prog-wrap">
   <div class="prog-info">
     <span>PROGRESS</span>
-    <span>4/8 DONE</span>
+    <span>6/13 DONE</span>
   </div>
   <div class="prog">
-    <div class="prog-done"  style="width:50%"></div>
-    <div class="prog-doing" style="width:25%"></div>
-    <div class="prog-pend"  style="width:25%"></div>
+    <div class="prog-done"  style="width:46%"></div>
+    <div class="prog-doing" style="width:8%"></div>
+    <div class="prog-pend"  style="width:46%"></div>
   </div>
 </div>
 
 <!-- Tabs -->
-<div class="tabs"><button class="tab active" data-tab="all">📊 全部 <span class="tab-count">8</span></button></div>
-<div class="tab-panel active" id="tab-all"><div class="board"><div class="col"><div class="col-head col-doing">🔄 进行中 <span class="cnt">2</span></div><div class="col-body"><div class="card"><div class="card-title">投资顾问 Agent 团队</div><div class="card-tags"></div><div class="card-desc">六步全自动验证通过，待封装脚本+配置Agent。详见 memory/2026-03-19.md</div></div><div class="card"><div class="card-title">记忆系统优化</div><div class="card-tags"></div><div class="card-desc">MEMORY.md 瘦身 + AGENTS-HEARTBEAT.md 拆分</div></div></div></div><div class="col"><div class="col-head col-pending">⏸️ 待处理 <span class="cnt">2</span></div><div class="col-body"><div class="card"><div class="card-title">MOB 画像采买服务（施旸）</div><div class="card-tags"></div><div class="card-desc">已聊完，等联盟启动后再对接，乙方先保持联系</div></div><div class="card"><div class="card-title">抖音监控</div><div class="card-tags"></div><div class="card-desc">Chrome Relay 扩展连接问题，需登录方案</div></div></div></div><div class="col"><div class="col-head col-done">✅ 已完成 <span class="cnt">4</span></div><div class="col-body"><div class="card" style="opacity:0.55"><div class="card-title">研发团队自我改造</div><div class="card-tags"></div><div class="card-desc">P0共享配置+日记清理 + P1飞书通知库+trader-pack拆分，全部验证通过</div></div><div class="card" style="opacity:0.55"><div class="card-title">Task Tracker v6 重构</div><div class="card-tags"></div><div class="card-desc">五层分离重构完成，12文件交付，pipeline端到端通过</div></div><div class="card" style="opacity:0.55"><div class="card-title">AGENTS-HEARTBEAT.md 瘦身</div><div class="card-tags"></div><div class="card-desc">25KB→1.5K，详细规范移到 docs/execution-spec.md</div></div><div class="card" style="opacity:0.55"><div class="card-title">自我改造全面自检</div><div class="card-tags"></div><div class="card-desc">13文件编译通过，3项运行验证通过，Bitable看板同步</div></div></div></div></div></div>
+<div class="tabs"><button class="tab active" data-tab="all">📊 全部 <span class="tab-count">13</span></button>
+<button class="tab" data-tab="work" style="--tab-color:#e94560">💼 工作 <span class="tab-count">2</span></button>
+<button class="tab" data-tab="mba" style="--tab-color:#7b2ff7">🎓 MBA <span class="tab-count">1</span></button>
+<button class="tab" data-tab="sys" style="--tab-color:#4895ef">🔧 赛博系统 <span class="tab-count">2</span></button>
+<button class="tab" data-tab="tech" style="--tab-color:#f4845f">💻 技术探索 <span class="tab-count">1</span></button>
+<button class="tab" data-tab="content" style="--tab-color:#2ec4b6">📝 内容创作 <span class="tab-count">1</span></button></div>
+<div class="tab-panel active" id="tab-all"><div class="board"><div class="col"><div class="col-head col-doing">🔄 进行中 <span class="cnt">1</span></div><div class="col-body"><div class="card"><div class="card-title">投资顾问 Agent 团队</div><div class="card-tags"><span class="tag tag-p1">P1 重要</span><span class="tag tag-stage">⚡ 执行</span></div><div class="card-desc">六步全自动验证通过，screener.py+Cron已上线，待封装 analyst/advisor</div><div class="card-log">[3/19] 数据源验证5个
+[3/19] 六步全自动 <3秒
+[3/19] screener.py+Cron上线
+[3/19] 卖出提醒Cron上线</div></div></div></div><div class="col"><div class="col-head col-pending">⏸️ 待处理 <span class="cnt">6</span></div><div class="col-body"><div class="card"><div class="card-title">MBA 毕业论文选题与撰写</div><div class="card-tags"><span class="tag tag-p1">P1 重要</span><span class="tag tag-stage">📋 规划</span></div><div class="card-desc">待选题</div></div><div class="card"><div class="card-title">技术博客/公众号开通</div><div class="card-tags"><span class="tag tag-p2">P2 普通</span><span class="tag tag-stage">📋 规划</span></div><div class="card-desc">待启动</div></div><div class="card"><div class="card-title">百亿级曲库数据处理方案</div><div class="card-tags"><span class="tag tag-p1">P1 重要</span><span class="tag tag-stage">📋 规划</span></div><div class="card-desc">方案待落地</div></div><div class="card"><div class="card-title">抖音监控修复</div><div class="card-tags"><span class="tag tag-p2">P2 普通</span><span class="tag tag-stage">📋 规划</span></div><div class="card-block">⚠️ Chrome Relay 扩展连接问题，需登录方案或 Cookie/API</div></div><div class="card"><div class="card-title">找施旸当面聊 MOB 画像采买服务</div><div class="card-tags"><span class="tag tag-p1">P1 重要</span><span class="tag tag-stage">⏳ 等待中</span></div><div class="card-desc">已聊完，等联盟启动后再对接</div><div class="card-log">[3/17] 从微信截图录入
+[3/17] 已聊完，等联盟启动</div></div><div class="card"><div class="card-title">PDF 生成器 WeasyPrint 依赖修复</div><div class="card-tags"><span class="tag tag-p3">P3 低优</span><span class="tag tag-stage">📋 规划</span></div><div class="card-block">⚠️ WeasyPrint 依赖问题，可选修复</div></div></div></div><div class="col"><div class="col-head col-done">✅ 已完成 <span class="cnt">6</span></div><div class="col-body"><div class="card" style="opacity:0.55"><div class="card-title">AGENTS-HEARTBEAT.md 瘦身</div><div class="card-tags"><span class="tag tag-p2">P2 普通</span><span class="tag tag-stage">🗄️ 归档</span></div><div class="card-desc">25KB→1.5K，详细规范移到 docs/execution-spec.md</div><div class="card-log">[3/16] 启动
+[3/19] 完成 25K→1.5K</div></div><div class="card" style="opacity:0.55"><div class="card-title">飞书任务看板上线</div><div class="card-tags"><span class="tag tag-p1">P1 重要</span><span class="tag tag-stage">🗄️ 归档</span></div><div class="card-desc">Bitable + GitHub Pages 看板上线</div><div class="card-log">[3/17] 建表+字段+8条任务
+[3/17] GitHub Pages部署
+[3/17] Mission Control升级</div></div><div class="card" style="opacity:0.55"><div class="card-title">语音对话闭环</div><div class="card-tags"><span class="tag tag-p2">P2 普通</span><span class="tag tag-stage">🗄️ 归档</span></div><div class="card-desc">飞书语音→转文字→处理→TTS→飞书语音条，全链路通</div><div class="card-log">[3/19] edge-tts+opus方案验证
+[3/19] local_asr.py本地ASR</div></div><div class="card" style="opacity:0.55"><div class="card-title">Token消耗与成本核算</div><div class="card-tags"><span class="tag tag-p1">P1 重要</span><span class="tag tag-stage">🗄️ 归档</span></div><div class="card-desc">发现 OpenClaw usage 解析 bug，fx-netease 实际消耗远超报告值</div><div class="card-log">[3/18] 发现311倍差异
+[3/18] 根因分析完成</div></div><div class="card" style="opacity:0.55"><div class="card-title">Task Tracker v6 重构</div><div class="card-tags"><span class="tag tag-p1">P1 重要</span><span class="tag tag-stage">🗄️ 归档</span></div><div class="card-desc">五层分离重构完成，12文件交付，pipeline端到端通过</div><div class="card-log">[3/21] 需求文档+设计文档
+[3/21] Coder实现阶段1-4
+[3/21] 全量验证通过</div></div></div></div></div></div>
+<div class="tab-panel" id="tab-work"><div class="board"><div class="col"><div class="col-head col-doing">🔄 进行中 <span class="cnt">0</span></div><div class="col-body"><div class="empty">🎯 暂无</div></div></div><div class="col"><div class="col-head col-pending">⏸️ 待处理 <span class="cnt">2</span></div><div class="col-body"><div class="card"><div class="card-title">百亿级曲库数据处理方案</div><div class="card-tags"><span class="tag tag-p1">P1 重要</span><span class="tag tag-stage">📋 规划</span></div><div class="card-desc">方案待落地</div></div><div class="card"><div class="card-title">找施旸当面聊 MOB 画像采买服务</div><div class="card-tags"><span class="tag tag-p1">P1 重要</span><span class="tag tag-stage">⏳ 等待中</span></div><div class="card-desc">已聊完，等联盟启动后再对接</div><div class="card-log">[3/17] 从微信截图录入
+[3/17] 已聊完，等联盟启动</div></div></div></div><div class="col"><div class="col-head col-done">✅ 已完成 <span class="cnt">0</span></div><div class="col-body"><div class="empty">📭 暂无</div></div></div></div></div>
+<div class="tab-panel" id="tab-mba"><div class="board"><div class="col"><div class="col-head col-doing">🔄 进行中 <span class="cnt">0</span></div><div class="col-body"><div class="empty">🎯 暂无</div></div></div><div class="col"><div class="col-head col-pending">⏸️ 待处理 <span class="cnt">1</span></div><div class="col-body"><div class="card"><div class="card-title">MBA 毕业论文选题与撰写</div><div class="card-tags"><span class="tag tag-p1">P1 重要</span><span class="tag tag-stage">📋 规划</span></div><div class="card-desc">待选题</div></div></div></div><div class="col"><div class="col-head col-done">✅ 已完成 <span class="cnt">0</span></div><div class="col-body"><div class="empty">📭 暂无</div></div></div></div></div>
+<div class="tab-panel" id="tab-sys"><div class="board"><div class="col"><div class="col-head col-doing">🔄 进行中 <span class="cnt">0</span></div><div class="col-body"><div class="empty">🎯 暂无</div></div></div><div class="col"><div class="col-head col-pending">⏸️ 待处理 <span class="cnt">2</span></div><div class="col-body"><div class="card"><div class="card-title">抖音监控修复</div><div class="card-tags"><span class="tag tag-p2">P2 普通</span><span class="tag tag-stage">📋 规划</span></div><div class="card-block">⚠️ Chrome Relay 扩展连接问题，需登录方案或 Cookie/API</div></div><div class="card"><div class="card-title">PDF 生成器 WeasyPrint 依赖修复</div><div class="card-tags"><span class="tag tag-p3">P3 低优</span><span class="tag tag-stage">📋 规划</span></div><div class="card-block">⚠️ WeasyPrint 依赖问题，可选修复</div></div></div></div><div class="col"><div class="col-head col-done">✅ 已完成 <span class="cnt">6</span></div><div class="col-body"><div class="card" style="opacity:0.55"><div class="card-title">AGENTS-HEARTBEAT.md 瘦身</div><div class="card-tags"><span class="tag tag-p2">P2 普通</span><span class="tag tag-stage">🗄️ 归档</span></div><div class="card-desc">25KB→1.5K，详细规范移到 docs/execution-spec.md</div><div class="card-log">[3/16] 启动
+[3/19] 完成 25K→1.5K</div></div><div class="card" style="opacity:0.55"><div class="card-title">飞书任务看板上线</div><div class="card-tags"><span class="tag tag-p1">P1 重要</span><span class="tag tag-stage">🗄️ 归档</span></div><div class="card-desc">Bitable + GitHub Pages 看板上线</div><div class="card-log">[3/17] 建表+字段+8条任务
+[3/17] GitHub Pages部署
+[3/17] Mission Control升级</div></div><div class="card" style="opacity:0.55"><div class="card-title">语音对话闭环</div><div class="card-tags"><span class="tag tag-p2">P2 普通</span><span class="tag tag-stage">🗄️ 归档</span></div><div class="card-desc">飞书语音→转文字→处理→TTS→飞书语音条，全链路通</div><div class="card-log">[3/19] edge-tts+opus方案验证
+[3/19] local_asr.py本地ASR</div></div><div class="card" style="opacity:0.55"><div class="card-title">Token消耗与成本核算</div><div class="card-tags"><span class="tag tag-p1">P1 重要</span><span class="tag tag-stage">🗄️ 归档</span></div><div class="card-desc">发现 OpenClaw usage 解析 bug，fx-netease 实际消耗远超报告值</div><div class="card-log">[3/18] 发现311倍差异
+[3/18] 根因分析完成</div></div><div class="card" style="opacity:0.55"><div class="card-title">Task Tracker v6 重构</div><div class="card-tags"><span class="tag tag-p1">P1 重要</span><span class="tag tag-stage">🗄️ 归档</span></div><div class="card-desc">五层分离重构完成，12文件交付，pipeline端到端通过</div><div class="card-log">[3/21] 需求文档+设计文档
+[3/21] Coder实现阶段1-4
+[3/21] 全量验证通过</div></div></div></div></div></div>
+<div class="tab-panel" id="tab-tech"><div class="board"><div class="col"><div class="col-head col-doing">🔄 进行中 <span class="cnt">1</span></div><div class="col-body"><div class="card"><div class="card-title">投资顾问 Agent 团队</div><div class="card-tags"><span class="tag tag-p1">P1 重要</span><span class="tag tag-stage">⚡ 执行</span></div><div class="card-desc">六步全自动验证通过，screener.py+Cron已上线，待封装 analyst/advisor</div><div class="card-log">[3/19] 数据源验证5个
+[3/19] 六步全自动 <3秒
+[3/19] screener.py+Cron上线
+[3/19] 卖出提醒Cron上线</div></div></div></div><div class="col"><div class="col-head col-pending">⏸️ 待处理 <span class="cnt">0</span></div><div class="col-body"><div class="empty">✨ 全部处理完毕</div></div></div><div class="col"><div class="col-head col-done">✅ 已完成 <span class="cnt">0</span></div><div class="col-body"><div class="empty">📭 暂无</div></div></div></div></div>
+<div class="tab-panel" id="tab-content"><div class="board"><div class="col"><div class="col-head col-doing">🔄 进行中 <span class="cnt">0</span></div><div class="col-body"><div class="empty">🎯 暂无</div></div></div><div class="col"><div class="col-head col-pending">⏸️ 待处理 <span class="cnt">1</span></div><div class="col-body"><div class="card"><div class="card-title">技术博客/公众号开通</div><div class="card-tags"><span class="tag tag-p2">P2 普通</span><span class="tag tag-stage">📋 规划</span></div><div class="card-desc">待启动</div></div></div></div><div class="col"><div class="col-head col-done">✅ 已完成 <span class="cnt">0</span></div><div class="col-body"><div class="empty">📭 暂无</div></div></div></div></div>
 
-<div class="footer">🦞 CYBER LOBSTER MISSION CONTROL · POWERED BY OPENCLAW · 2026-03-21T21:32:28+08:00</div>
+<div class="footer">🦞 CYBER LOBSTER MISSION CONTROL · POWERED BY OPENCLAW · 2026-03-21T21:45:03+08:00</div>
 
 <script>
 document.querySelectorAll('.tab').forEach(function(btn) {
