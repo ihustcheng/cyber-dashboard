@@ -5,565 +5,176 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>🦞 赛博 Mission Control</title>
 <style>
-/* ============================================================
-   赛博 Mission Control — Dashboard CSS
-   从 generate_dashboard.py v3 提取，供 render_dashboard.py 内联
-   深色主题 · 龙虾巡逻动画 · 统计图表
-   ============================================================ */
-
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;500&display=swap');
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Noto Sans SC',-apple-system,sans-serif;background:#06060f;color:#e0e0e0;min-height:100vh}
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse at 15% 50%,rgba(233,69,96,.06) 0%,transparent 50%),radial-gradient(ellipse at 85% 15%,rgba(72,149,239,.06) 0%,transparent 50%),radial-gradient(ellipse at 50% 85%,rgba(76,201,240,.04) 0%,transparent 50%);z-index:-1}
 
-* { margin: 0; padding: 0; box-sizing: border-box; }
-
-body {
-  font-family: 'Noto Sans SC', -apple-system, sans-serif;
-  background: #06060f;
-  color: #e0e0e0;
-  min-height: 100vh;
+/* 龙虾巡逻动画 - 在 header 内 */
+.lobster-patrol{position:absolute;top:50%;transform:translateY(-50%);animation:patrol 25s linear infinite;font-size:24px;filter:drop-shadow(0 0 6px rgba(233,69,96,.2));z-index:1;pointer-events:none}
+@keyframes patrol{
+  0%{left:32%;transform:translateY(-50%) scaleX(1)}
+  1%{transform:translateY(-50%) scaleX(1) translateY(-2px)}
+  2%{transform:translateY(-50%) scaleX(1) translateY(0)}
+  3.5%{transform:translateY(-50%) scaleX(1) translateY(-2px)}
+  5%{transform:translateY(-50%) scaleX(1) translateY(0)}
+  6.5%{transform:translateY(-50%) scaleX(1) translateY(-2px)}
+  8%{transform:translateY(-50%) scaleX(1) translateY(0)}
+  46%{left:68%;transform:translateY(-50%) scaleX(1) translateY(0)}
+  47%{left:68%;transform:translateY(-50%) scaleX(1) translateY(-3px)}
+  48%{left:68%;transform:translateY(-50%) scaleX(1) translateY(-1px)}
+  49%{left:68%;transform:translateY(-50%) scaleX(-1) translateY(0)}
+  50.5%{transform:translateY(-50%) scaleX(-1) translateY(-2px)}
+  52%{transform:translateY(-50%) scaleX(-1) translateY(0)}
+  53.5%{transform:translateY(-50%) scaleX(-1) translateY(-2px)}
+  55%{transform:translateY(-50%) scaleX(-1) translateY(0)}
+  56.5%{transform:translateY(-50%) scaleX(-1) translateY(-2px)}
+  58%{transform:translateY(-50%) scaleX(-1) translateY(0)}
+  96%{left:32%;transform:translateY(-50%) scaleX(-1) translateY(0)}
+  97%{left:32%;transform:translateY(-50%) scaleX(-1) translateY(-3px)}
+  98%{left:32%;transform:translateY(-50%) scaleX(-1) translateY(-1px)}
+  99%{left:32%;transform:translateY(-50%) scaleX(1) translateY(0)}
+  100%{left:32%;transform:translateY(-50%) scaleX(1) translateY(0)}
+}
+.lobster-patrol .bubble{
+  position:absolute;top:-20px;left:50%;transform:translateX(-50%);
+  font-size:8px;color:#666;white-space:nowrap;
+  background:rgba(255,255,255,.05);padding:2px 7px;border-radius:6px;
+  opacity:0;animation:bubbleShow 25s linear infinite;
+  font-family:'Noto Sans SC',sans-serif;pointer-events:none;
+}
+@keyframes bubbleShow{
+  0%,18%{opacity:0}
+  20%{opacity:.8}
+  30%{opacity:.8}
+  32%{opacity:0}
+  65%,72%{opacity:0}
+  74%{opacity:.8}
+  84%{opacity:.8}
+  86%{opacity:0}
+  100%{opacity:0}
 }
 
-body::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  background:
-    radial-gradient(ellipse at 15% 50%, rgba(233,69,96,.06) 0%, transparent 50%),
-    radial-gradient(ellipse at 85% 15%, rgba(72,149,239,.06) 0%, transparent 50%),
-    radial-gradient(ellipse at 50% 85%, rgba(76,201,240,.04) 0%, transparent 50%);
-  z-index: -1;
+/* Header */
+.header{padding:24px 36px 18px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,.04);position:relative;overflow:hidden}
+.header-l{display:flex;align-items:center;gap:14px}
+.logo{font-size:40px;animation:fl 3s ease-in-out infinite}
+@keyframes fl{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+.header h1{font-size:22px;font-weight:700;background:linear-gradient(135deg,#e94560,#4cc9f0);-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:1px}
+.subtitle{font-size:11px;color:#444;margin-top:2px;letter-spacing:1px;font-family:'JetBrains Mono',monospace}
+.header-r{text-align:right}
+.update-time{font-size:10px;color:#3a3a3a;font-family:'JetBrains Mono',monospace}
+.badge{display:inline-block;padding:3px 10px;border-radius:20px;font-size:10px;font-weight:500;margin-top:4px;background:rgba(46,196,182,.12);color:#2ec4b6;border:1px solid rgba(46,196,182,.25);animation:pul 2s ease-in-out infinite}
+@keyframes pul{0%,100%{box-shadow:0 0 0 0 rgba(46,196,182,.15)}50%{box-shadow:0 0 10px 3px rgba(46,196,182,.1)}}
+.dot{display:inline-block;width:5px;height:5px;border-radius:50%;background:#2ec4b6;margin-right:5px;animation:bk 1.5s ease-in-out infinite}
+@keyframes bk{0%,100%{opacity:1}50%{opacity:.3}}
+
+/* 控制面板区域 */
+.control-panel{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;padding:20px 36px}
+
+/* 赛博状态卡 */
+.agent-card{background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.06);border-radius:16px;padding:20px;position:relative;overflow:hidden}
+.agent-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,#e94560,#4cc9f0,#2ec4b6)}
+.agent-header{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.agent-avatar{font-size:36px;background:rgba(233,69,96,.08);border-radius:12px;width:52px;height:52px;display:flex;align-items:center;justify-content:center}
+.agent-name{font-size:18px;font-weight:700;color:#f0f0f0}
+.agent-role{font-size:10px;color:#666;font-family:'JetBrains Mono',monospace}
+.agent-status{display:inline-block;padding:2px 8px;border-radius:10px;font-size:9px;font-weight:600;background:rgba(46,196,182,.12);color:#2ec4b6;border:1px solid rgba(46,196,182,.2);margin-top:2px}
+.agent-stats{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:2px}
+.agent-stat{background:rgba(255,255,255,.03);border-radius:8px;padding:8px 10px}
+.agent-stat-label{font-size:9px;color:#555;text-transform:uppercase;letter-spacing:1px}
+.agent-stat-value{font-size:14px;font-weight:700;color:#ccc;margin-top:2px;font-family:'JetBrains Mono',monospace}
+.agent-current{margin-top:10px;padding:8px 10px;background:rgba(72,149,239,.06);border-radius:8px;border-left:3px solid #4895ef}
+.agent-current-label{font-size:9px;color:#4895ef;text-transform:uppercase;letter-spacing:1px;margin-bottom:3px}
+.agent-current-task{font-size:12px;color:#aaa}
+
+/* 活动时间线 */
+.timeline-card{background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.06);border-radius:16px;padding:20px;overflow:hidden;position:relative}
+.timeline-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,#f9c74f,#f4845f)}
+.section-title{font-size:13px;font-weight:600;color:#999;margin-bottom:12px;display:flex;align-items:center;gap:6px;letter-spacing:1px}
+.activities{display:flex;flex-direction:column;gap:6px;max-height:280px;overflow-y:auto}
+.activities::-webkit-scrollbar{width:3px}
+.activities::-webkit-scrollbar-thumb{background:rgba(255,255,255,.1);border-radius:3px}
+.activity{display:flex;gap:8px;padding:6px 8px;border-radius:6px;transition:background .2s}
+.activity:hover{background:rgba(255,255,255,.03)}
+.act-icon{font-size:14px;flex-shrink:0;margin-top:1px}
+.act-body{display:flex;flex-direction:column;gap:1px;min-width:0}
+.act-time{font-size:9px;color:#444;font-family:'JetBrains Mono',monospace}
+.act-text{font-size:11px;color:#999;line-height:1.4;word-break:break-word}
+.activity-empty{text-align:center;padding:40px 0;color:#333;font-size:12px}
+
+/* 统计图表 */
+.stats-card{background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.06);border-radius:16px;padding:20px;position:relative;overflow:hidden}
+.stats-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,#2ec4b6,#43aa8b)}
+.pie-container{display:flex;align-items:center;gap:16px;margin-top:4px}
+.pie{width:100px;height:100px;border-radius:50%;background:conic-gradient(#e94560 0% 29%, #4895ef 29% 58%, #f4845f 58% 72%, #7b2ff7 72% 86%, #2ec4b6 86% 100%);flex-shrink:0;position:relative}
+.pie::after{content:'';position:absolute;inset:25px;background:#0a0a14;border-radius:50%}
+.legend{display:flex;flex-direction:column;gap:5px;flex:1}
+.legend-item{font-size:11px;color:#888;display:flex;align-items:center;gap:6px}
+.legend-dot{width:8px;height:8px;border-radius:2px;flex-shrink:0}
+.legend-n{color:#555;font-family:'JetBrains Mono',monospace;font-size:10px}
+.mini-stats{display:grid;grid-template-columns:repeat(2,1fr);gap:6px;margin-top:14px}
+.mini-stat{text-align:center;padding:8px;background:rgba(255,255,255,.03);border-radius:8px}
+.mini-stat-n{font-size:20px;font-weight:900;font-family:'JetBrains Mono',monospace}
+.mini-stat-l{font-size:9px;color:#555;text-transform:uppercase;letter-spacing:1px;margin-top:2px}
+
+/* 进度条 */
+.prog-wrap{padding:4px 36px 0}
+.prog-info{display:flex;justify-content:space-between;font-size:10px;color:#444;margin-bottom:4px;font-family:'JetBrains Mono',monospace}
+.prog{height:4px;background:rgba(255,255,255,.04);border-radius:2px;overflow:hidden;display:flex}
+.prog-done{background:linear-gradient(90deg,#2ec4b6,#43aa8b)}
+.prog-doing{background:linear-gradient(90deg,#4895ef,#4cc9f0)}
+.prog-pend{background:linear-gradient(90deg,#f9c74f,#f4845f)}
+
+/* Tabs */
+.tabs{display:flex;gap:5px;padding:18px 36px 0;flex-wrap:wrap}
+.tab{padding:7px 14px;border-radius:8px;border:1px solid rgba(255,255,255,.06);background:rgba(255,255,255,.02);color:#666;font-size:12px;font-weight:500;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:5px}
+.tab:hover{background:rgba(255,255,255,.05);color:#aaa;border-color:rgba(255,255,255,.1)}
+.tab.active{background:rgba(76,201,240,.08);color:var(--tab-color,#4cc9f0);border-color:rgba(76,201,240,.2);box-shadow:0 0 8px rgba(76,201,240,.06)}
+.tab-count{background:rgba(255,255,255,.08);border-radius:6px;padding:1px 6px;font-size:10px;font-weight:700}
+.tab.active .tab-count{background:rgba(255,255,255,.12)}
+
+/* Panels */
+.tab-panel{display:none;padding:10px 36px 28px}
+.tab-panel.active{display:block;animation:fadeIn .25s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+
+/* Board */
+.board{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.col{background:rgba(255,255,255,.015);border:1px solid rgba(255,255,255,.04);border-radius:12px;overflow:hidden}
+.col-head{padding:12px 16px;font-size:12px;font-weight:600;letter-spacing:.5px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,.04)}
+.col-doing{background:linear-gradient(135deg,rgba(233,69,96,.08),transparent);color:#e94560}
+.col-pending{background:linear-gradient(135deg,rgba(72,149,239,.08),transparent);color:#4895ef}
+.col-done{background:linear-gradient(135deg,rgba(46,196,182,.08),transparent);color:#2ec4b6}
+.cnt{background:rgba(255,255,255,.08);border-radius:6px;padding:1px 7px;font-size:10px}
+.col-body{padding:8px;display:flex;flex-direction:column;gap:7px;min-height:120px}
+
+/* Cards */
+.card{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.05);border-radius:9px;padding:12px;transition:all .2s}
+.card:hover{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.1);transform:translateX(2px);box-shadow:0 2px 12px rgba(0,0,0,.15)}
+.card-title{font-size:12px;font-weight:600;margin-bottom:5px;color:#eee}
+.card-tags{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:5px}
+.tag{display:inline-block;padding:1px 6px;border-radius:4px;font-size:9px;font-weight:500}
+.tag-p0{background:rgba(233,69,96,.18);color:#ff6b6b;border:1px solid rgba(233,69,96,.25)}
+.tag-p1{background:rgba(255,159,67,.18);color:#ffa94d;border:1px solid rgba(255,159,67,.25)}
+.tag-p2{background:rgba(249,199,79,.18);color:#f9c74f;border:1px solid rgba(249,199,79,.25)}
+.tag-p3{background:rgba(46,196,182,.18);color:#2ec4b6;border:1px solid rgba(46,196,182,.25)}
+.tag-stage{background:rgba(72,149,239,.1);color:#74b9ff;border:1px solid rgba(72,149,239,.15)}
+.card-desc{font-size:10px;color:#666;line-height:1.4;margin-top:3px}
+.card-block{font-size:9px;color:#e94560;margin-top:4px;padding:4px 8px;background:rgba(233,69,96,.06);border-radius:4px;border-left:2px solid #e94560}
+.card-log{font-size:8px;color:#3a3a3a;margin-top:5px;padding-top:5px;border-top:1px solid rgba(255,255,255,.03);font-family:'JetBrains Mono',monospace;line-height:1.5;white-space:pre-line}
+.empty{text-align:center;padding:28px 12px;color:#333;font-size:11px}
+.footer{text-align:center;padding:18px;color:#222;font-size:10px;border-top:1px solid rgba(255,255,255,.03);font-family:'JetBrains Mono',monospace}
+
+@media(max-width:1000px){
+  .control-panel{grid-template-columns:1fr}
+  .board{grid-template-columns:1fr}
+  .header{flex-direction:column;gap:8px;text-align:center}
+  .header-r{text-align:center}
+  .tabs{justify-content:center}
+  .tab-panel{padding:10px 16px 28px}
+  .control-panel{padding:16px}
 }
-
-/* ── 龙虾巡逻动画 ── */
-.lobster-patrol {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  animation: patrol 25s linear infinite;
-  font-size: 24px;
-  filter: drop-shadow(0 0 6px rgba(233,69,96,.2));
-  z-index: 1;
-  pointer-events: none;
-}
-
-@keyframes patrol {
-  0%   { left: 32%; transform: translateY(-50%) scaleX(1); }
-  1%   { transform: translateY(-50%) scaleX(1) translateY(-2px); }
-  2%   { transform: translateY(-50%) scaleX(1) translateY(0); }
-  3.5% { transform: translateY(-50%) scaleX(1) translateY(-2px); }
-  5%   { transform: translateY(-50%) scaleX(1) translateY(0); }
-  6.5% { transform: translateY(-50%) scaleX(1) translateY(-2px); }
-  8%   { transform: translateY(-50%) scaleX(1) translateY(0); }
-  46%  { left: 68%; transform: translateY(-50%) scaleX(1) translateY(0); }
-  47%  { left: 68%; transform: translateY(-50%) scaleX(1) translateY(-3px); }
-  48%  { left: 68%; transform: translateY(-50%) scaleX(1) translateY(-1px); }
-  49%  { left: 68%; transform: translateY(-50%) scaleX(-1) translateY(0); }
-  50.5%{ transform: translateY(-50%) scaleX(-1) translateY(-2px); }
-  52%  { transform: translateY(-50%) scaleX(-1) translateY(0); }
-  53.5%{ transform: translateY(-50%) scaleX(-1) translateY(-2px); }
-  55%  { transform: translateY(-50%) scaleX(-1) translateY(0); }
-  56.5%{ transform: translateY(-50%) scaleX(-1) translateY(-2px); }
-  58%  { transform: translateY(-50%) scaleX(-1) translateY(0); }
-  96%  { left: 32%; transform: translateY(-50%) scaleX(-1) translateY(0); }
-  97%  { left: 32%; transform: translateY(-50%) scaleX(-1) translateY(-3px); }
-  98%  { left: 32%; transform: translateY(-50%) scaleX(-1) translateY(-1px); }
-  99%  { left: 32%; transform: translateY(-50%) scaleX(1) translateY(0); }
-  100% { left: 32%; transform: translateY(-50%) scaleX(1) translateY(0); }
-}
-
-.lobster-patrol .bubble {
-  position: absolute;
-  top: -20px;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 8px;
-  color: #666;
-  white-space: nowrap;
-  background: rgba(255,255,255,.05);
-  padding: 2px 7px;
-  border-radius: 6px;
-  opacity: 0;
-  animation: bubbleShow 25s linear infinite;
-  font-family: 'Noto Sans SC', sans-serif;
-  pointer-events: none;
-}
-
-@keyframes bubbleShow {
-  0%, 18%  { opacity: 0; }
-  20%      { opacity: .8; }
-  30%      { opacity: .8; }
-  32%      { opacity: 0; }
-  65%, 72% { opacity: 0; }
-  74%      { opacity: .8; }
-  84%      { opacity: .8; }
-  86%      { opacity: 0; }
-  100%     { opacity: 0; }
-}
-
-/* ── Header ── */
-.header {
-  padding: 24px 36px 18px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  border-bottom: 1px solid rgba(255,255,255,.04);
-  position: relative;
-  overflow: hidden;
-}
-
-.header-l { display: flex; align-items: center; gap: 14px; }
-
-.logo {
-  font-size: 40px;
-  animation: fl 3s ease-in-out infinite;
-}
-
-@keyframes fl {
-  0%, 100% { transform: translateY(0); }
-  50%       { transform: translateY(-5px); }
-}
-
-.header h1 {
-  font-size: 22px;
-  font-weight: 700;
-  background: linear-gradient(135deg, #e94560, #4cc9f0);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  letter-spacing: 1px;
-}
-
-.subtitle {
-  font-size: 11px;
-  color: #444;
-  margin-top: 2px;
-  letter-spacing: 1px;
-  font-family: 'JetBrains Mono', monospace;
-}
-
-.header-r { text-align: right; }
-
-.update-time {
-  font-size: 10px;
-  color: #3a3a3a;
-  font-family: 'JetBrains Mono', monospace;
-}
-
-.badge {
-  display: inline-block;
-  padding: 3px 10px;
-  border-radius: 20px;
-  font-size: 10px;
-  font-weight: 500;
-  margin-top: 4px;
-  background: rgba(46,196,182,.12);
-  color: #2ec4b6;
-  border: 1px solid rgba(46,196,182,.25);
-  animation: pul 2s ease-in-out infinite;
-}
-
-@keyframes pul {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(46,196,182,.15); }
-  50%       { box-shadow: 0 0 10px 3px rgba(46,196,182,.1); }
-}
-
-.dot {
-  display: inline-block;
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background: #2ec4b6;
-  margin-right: 5px;
-  animation: bk 1.5s ease-in-out infinite;
-}
-
-@keyframes bk {
-  0%, 100% { opacity: 1; }
-  50%       { opacity: .3; }
-}
-
-/* ── 控制面板 ── */
-.control-panel {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 16px;
-  padding: 20px 36px;
-}
-
-/* ── 赛博状态卡 ── */
-.agent-card {
-  background: rgba(255,255,255,.025);
-  border: 1px solid rgba(255,255,255,.06);
-  border-radius: 16px;
-  padding: 20px;
-  position: relative;
-  overflow: hidden;
-}
-
-.agent-card::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 2px;
-  background: linear-gradient(90deg, #e94560, #4cc9f0, #2ec4b6);
-}
-
-.agent-header { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
-
-.agent-avatar {
-  font-size: 36px;
-  background: rgba(233,69,96,.08);
-  border-radius: 12px;
-  width: 52px; height: 52px;
-  display: flex; align-items: center; justify-content: center;
-}
-
-.agent-name  { font-size: 18px; font-weight: 700; color: #f0f0f0; }
-.agent-role  { font-size: 10px; color: #666; font-family: 'JetBrains Mono', monospace; }
-
-.agent-status {
-  display: inline-block;
-  padding: 2px 8px;
-  border-radius: 10px;
-  font-size: 9px;
-  font-weight: 600;
-  background: rgba(46,196,182,.12);
-  color: #2ec4b6;
-  border: 1px solid rgba(46,196,182,.2);
-  margin-top: 2px;
-}
-
-.agent-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 2px; }
-
-.agent-stat {
-  background: rgba(255,255,255,.03);
-  border-radius: 8px;
-  padding: 8px 10px;
-}
-
-.agent-stat-label { font-size: 9px; color: #555; text-transform: uppercase; letter-spacing: 1px; }
-.agent-stat-value {
-  font-size: 14px;
-  font-weight: 700;
-  color: #ccc;
-  margin-top: 2px;
-  font-family: 'JetBrains Mono', monospace;
-}
-
-.agent-current {
-  margin-top: 10px;
-  padding: 8px 10px;
-  background: rgba(72,149,239,.06);
-  border-radius: 8px;
-  border-left: 3px solid #4895ef;
-}
-
-.agent-current-label {
-  font-size: 9px;
-  color: #4895ef;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  margin-bottom: 3px;
-}
-
-.agent-current-task { font-size: 12px; color: #aaa; }
-
-/* ── 活动时间线 ── */
-.timeline-card {
-  background: rgba(255,255,255,.025);
-  border: 1px solid rgba(255,255,255,.06);
-  border-radius: 16px;
-  padding: 20px;
-  overflow: hidden;
-  position: relative;
-}
-
-.timeline-card::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 2px;
-  background: linear-gradient(90deg, #f9c74f, #f4845f);
-}
-
-.section-title {
-  font-size: 13px;
-  font-weight: 600;
-  color: #999;
-  margin-bottom: 12px;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  letter-spacing: 1px;
-}
-
-.activities {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  max-height: 280px;
-  overflow-y: auto;
-}
-
-.activities::-webkit-scrollbar { width: 3px; }
-.activities::-webkit-scrollbar-thumb { background: rgba(255,255,255,.1); border-radius: 3px; }
-
-.activity {
-  display: flex;
-  gap: 8px;
-  padding: 6px 8px;
-  border-radius: 6px;
-  transition: background .2s;
-}
-
-.activity:hover { background: rgba(255,255,255,.03); }
-
-.act-icon { font-size: 14px; flex-shrink: 0; margin-top: 1px; }
-
-.act-body {
-  display: flex;
-  flex-direction: column;
-  gap: 1px;
-  min-width: 0;
-}
-
-.act-time { font-size: 9px; color: #444; font-family: 'JetBrains Mono', monospace; }
-.act-text  { font-size: 11px; color: #999; line-height: 1.4; word-break: break-word; }
-.activity-empty { text-align: center; padding: 40px 0; color: #333; font-size: 12px; }
-
-/* ── 统计图表 ── */
-.stats-card {
-  background: rgba(255,255,255,.025);
-  border: 1px solid rgba(255,255,255,.06);
-  border-radius: 16px;
-  padding: 20px;
-  position: relative;
-  overflow: hidden;
-}
-
-.stats-card::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 2px;
-  background: linear-gradient(90deg, #2ec4b6, #43aa8b);
-}
-
-.pie-container { display: flex; align-items: center; gap: 16px; margin-top: 4px; }
-
-.pie {
-  width: 100px; height: 100px;
-  border-radius: 50%;
-  background: conic-gradient(#e94560 0% 29%, #4895ef 29% 58%, #f4845f 58% 72%, #7b2ff7 72% 86%, #2ec4b6 86% 100%);
-  flex-shrink: 0;
-  position: relative;
-}
-
-.pie::after {
-  content: '';
-  position: absolute;
-  inset: 25px;
-  background: #0a0a14;
-  border-radius: 50%;
-}
-
-.legend { display: flex; flex-direction: column; gap: 5px; flex: 1; }
-.legend-item { font-size: 11px; color: #888; display: flex; align-items: center; gap: 6px; }
-.legend-dot { width: 8px; height: 8px; border-radius: 2px; flex-shrink: 0; }
-.legend-n { color: #555; font-family: 'JetBrains Mono', monospace; font-size: 10px; }
-
-.mini-stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; margin-top: 14px; }
-
-.mini-stat { text-align: center; padding: 8px; background: rgba(255,255,255,.03); border-radius: 8px; }
-.mini-stat-n { font-size: 20px; font-weight: 900; font-family: 'JetBrains Mono', monospace; }
-.mini-stat-l { font-size: 9px; color: #555; text-transform: uppercase; letter-spacing: 1px; margin-top: 2px; }
-
-/* ── 进度条 ── */
-.prog-wrap { padding: 4px 36px 0; }
-
-.prog-info {
-  display: flex;
-  justify-content: space-between;
-  font-size: 10px;
-  color: #444;
-  margin-bottom: 4px;
-  font-family: 'JetBrains Mono', monospace;
-}
-
-.prog {
-  height: 4px;
-  background: rgba(255,255,255,.04);
-  border-radius: 2px;
-  overflow: hidden;
-  display: flex;
-}
-
-.prog-done  { background: linear-gradient(90deg, #2ec4b6, #43aa8b); }
-.prog-doing { background: linear-gradient(90deg, #4895ef, #4cc9f0); }
-.prog-pend  { background: linear-gradient(90deg, #f9c74f, #f4845f); }
-
-/* ── Tabs ── */
-.tabs {
-  display: flex;
-  gap: 5px;
-  padding: 18px 36px 0;
-  flex-wrap: wrap;
-}
-
-.tab {
-  padding: 7px 14px;
-  border-radius: 8px;
-  border: 1px solid rgba(255,255,255,.06);
-  background: rgba(255,255,255,.02);
-  color: #666;
-  font-size: 12px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all .2s;
-  display: flex;
-  align-items: center;
-  gap: 5px;
-}
-
-.tab:hover { background: rgba(255,255,255,.05); color: #aaa; border-color: rgba(255,255,255,.1); }
-
-.tab.active {
-  background: rgba(76,201,240,.08);
-  color: var(--tab-color, #4cc9f0);
-  border-color: rgba(76,201,240,.2);
-  box-shadow: 0 0 8px rgba(76,201,240,.06);
-}
-
-.tab-count {
-  background: rgba(255,255,255,.08);
-  border-radius: 6px;
-  padding: 1px 6px;
-  font-size: 10px;
-  font-weight: 700;
-}
-
-.tab.active .tab-count { background: rgba(255,255,255,.12); }
-
-/* ── Panels ── */
-.tab-panel { display: none; padding: 10px 36px 28px; }
-.tab-panel.active { display: block; animation: fadeIn .25s ease; }
-
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(6px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
-/* ── Board ── */
-.board { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
-
-.col {
-  background: rgba(255,255,255,.015);
-  border: 1px solid rgba(255,255,255,.04);
-  border-radius: 12px;
-  overflow: hidden;
-}
-
-.col-head {
-  padding: 12px 16px;
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: .5px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  border-bottom: 1px solid rgba(255,255,255,.04);
-}
-
-.col-doing   { background: linear-gradient(135deg, rgba(233,69,96,.08), transparent); color: #e94560; }
-.col-pending { background: linear-gradient(135deg, rgba(72,149,239,.08), transparent); color: #4895ef; }
-.col-done    { background: linear-gradient(135deg, rgba(46,196,182,.08), transparent); color: #2ec4b6; }
-
-.cnt { background: rgba(255,255,255,.08); border-radius: 6px; padding: 1px 7px; font-size: 10px; }
-
-.col-body {
-  padding: 8px;
-  display: flex;
-  flex-direction: column;
-  gap: 7px;
-  min-height: 120px;
-}
-
-/* ── Cards ── */
-.card {
-  background: rgba(255,255,255,.03);
-  border: 1px solid rgba(255,255,255,.05);
-  border-radius: 9px;
-  padding: 12px;
-  transition: all .2s;
-}
-
-.card:hover {
-  background: rgba(255,255,255,.06);
-  border-color: rgba(255,255,255,.1);
-  transform: translateX(2px);
-  box-shadow: 0 2px 12px rgba(0,0,0,.15);
-}
-
-.card-title { font-size: 12px; font-weight: 600; margin-bottom: 5px; color: #eee; }
-.card-tags  { display: flex; gap: 5px; flex-wrap: wrap; margin-bottom: 5px; }
-
-.tag {
-  display: inline-block;
-  padding: 1px 6px;
-  border-radius: 4px;
-  font-size: 9px;
-  font-weight: 500;
-}
-
-.tag-p0    { background: rgba(233,69,96,.18);  color: #ff6b6b; border: 1px solid rgba(233,69,96,.25); }
-.tag-p1    { background: rgba(255,159,67,.18); color: #ffa94d; border: 1px solid rgba(255,159,67,.25); }
-.tag-p2    { background: rgba(249,199,79,.18); color: #f9c74f; border: 1px solid rgba(249,199,79,.25); }
-.tag-p3    { background: rgba(46,196,182,.18); color: #2ec4b6; border: 1px solid rgba(46,196,182,.25); }
-.tag-stage { background: rgba(72,149,239,.1);  color: #74b9ff; border: 1px solid rgba(72,149,239,.15); }
-
-.card-desc  { font-size: 10px; color: #666; line-height: 1.4; margin-top: 3px; }
-.card-block {
-  font-size: 9px;
-  color: #e94560;
-  margin-top: 4px;
-  padding: 4px 8px;
-  background: rgba(233,69,96,.06);
-  border-radius: 4px;
-  border-left: 2px solid #e94560;
-}
-
-.card-log {
-  font-size: 8px;
-  color: #3a3a3a;
-  margin-top: 5px;
-  padding-top: 5px;
-  border-top: 1px solid rgba(255,255,255,.03);
-  font-family: 'JetBrains Mono', monospace;
-  line-height: 1.5;
-  white-space: pre-line;
-}
-
-.empty { text-align: center; padding: 28px 12px; color: #333; font-size: 11px; }
-
-/* ── Footer ── */
-.footer {
-  text-align: center;
-  padding: 18px;
-  color: #222;
-  font-size: 10px;
-  border-top: 1px solid rgba(255,255,255,.03);
-  font-family: 'JetBrains Mono', monospace;
-}
-
-/* ── 响应式 ── */
-@media (max-width: 1000px) {
-  .control-panel  { grid-template-columns: 1fr; }
-  .board          { grid-template-columns: 1fr; }
-  .header         { flex-direction: column; gap: 8px; text-align: center; }
-  .header-r       { text-align: center; }
-  .tabs           { justify-content: center; }
-  .tab-panel      { padding: 10px 16px 28px; }
-  .control-panel  { padding: 16px; }
-}
-
 </style>
 </head>
 <body>
@@ -574,18 +185,17 @@ body::before {
     <div class="logo">🦞</div>
     <div>
       <h1>MISSION CONTROL</h1>
-      <div class="subtitle">CYBER LOBSTER · 2026-03-21</div>
+      <div class="subtitle">CYBER LOBSTER · 2026-03-23</div>
     </div>
   </div>
   <div class="header-r">
-    <div class="update-time">2026-03-21 21:45 CST</div>
+    <div class="update-time">2026-03-23 13:01 CST</div>
     <div class="badge"><span class="dot"></span>ONLINE</div>
   </div>
 </div>
 
 <!-- 控制面板 -->
 <div class="control-panel">
-
   <!-- 赛博状态卡 -->
   <div class="agent-card">
     <div class="agent-header">
@@ -597,22 +207,10 @@ body::before {
       </div>
     </div>
     <div class="agent-stats">
-      <div class="agent-stat">
-        <div class="agent-stat-label">执行中</div>
-        <div class="agent-stat-value" style="color:#4cc9f0">1</div>
-      </div>
-      <div class="agent-stat">
-        <div class="agent-stat-label">待处理</div>
-        <div class="agent-stat-value" style="color:#f9c74f">6</div>
-      </div>
-      <div class="agent-stat">
-        <div class="agent-stat-label">已完成</div>
-        <div class="agent-stat-value" style="color:#2ec4b6">6</div>
-      </div>
-      <div class="agent-stat">
-        <div class="agent-stat-label">P0/P1</div>
-        <div class="agent-stat-value" style="color:#e94560">8</div>
-      </div>
+      <div class="agent-stat"><div class="agent-stat-label">执行中</div><div class="agent-stat-value" style="color:#4cc9f0">1</div></div>
+      <div class="agent-stat"><div class="agent-stat-label">待处理</div><div class="agent-stat-value" style="color:#f9c74f">6</div></div>
+      <div class="agent-stat"><div class="agent-stat-label">已完成</div><div class="agent-stat-value" style="color:#2ec4b6">8</div></div>
+      <div class="agent-stat"><div class="agent-stat-label">P0/P1</div><div class="agent-stat-value" style="color:#e94560">9</div></div>
     </div>
     <div class="agent-current">
       <div class="agent-current-label">▶ 当前任务</div>
@@ -623,7 +221,7 @@ body::before {
   <!-- 活动时间线 -->
   <div class="timeline-card">
     <div class="section-title">⚡ 最近活动</div>
-    <div class="activities"><div class="activity"><span class="act-icon">✅</span><div class="act-body"><span class="act-time">3/21</span><span class="act-text">Task Tracker v6 重构: 需求文档+设计文档</span></div></div><div class="activity"><span class="act-icon">✅</span><div class="act-body"><span class="act-time">3/21</span><span class="act-text">Task Tracker v6 重构: Coder实现阶段1-4</span></div></div><div class="activity"><span class="act-icon">✅</span><div class="act-body"><span class="act-time">3/21</span><span class="act-text">Task Tracker v6 重构: 全量验证通过</span></div></div><div class="activity"><span class="act-icon">🔧</span><div class="act-body"><span class="act-time">3/19</span><span class="act-text">投资顾问 Agent 团队: 数据源验证5个</span></div></div><div class="activity"><span class="act-icon">🔧</span><div class="act-body"><span class="act-time">3/19</span><span class="act-text">投资顾问 Agent 团队: 六步全自动 &lt;3秒</span></div></div><div class="activity"><span class="act-icon">🔧</span><div class="act-body"><span class="act-time">3/19</span><span class="act-text">投资顾问 Agent 团队: screener.py+Cron上线</span></div></div><div class="activity"><span class="act-icon">🔧</span><div class="act-body"><span class="act-time">3/19</span><span class="act-text">投资顾问 Agent 团队: 卖出提醒Cron上线</span></div></div><div class="activity"><span class="act-icon">✅</span><div class="act-body"><span class="act-time">3/19</span><span class="act-text">记忆系统优化: 全部完成</span></div></div></div>
+    <div class="activities"><div class="activity"><span class="act-icon">✅</span><div class="act-body"><span class="act-time">03-21 20:00</span><span class="act-text">Task Tracker v6 重构完成 - 五层分离，12文件交付</span></div></div><div class="activity"><span class="act-icon">✅</span><div class="act-body"><span class="act-time">03-21 20:00</span><span class="act-text">研发团队自我改造完成 - P0共享配置+P1飞书通知库</span></div></div><div class="activity"><span class="act-icon">✅</span><div class="act-body"><span class="act-time">03-21 20:00</span><span class="act-text">自我改造全面自检通过 - 13文件编译，3项运行验证</span></div></div><div class="activity"><span class="act-icon">✅</span><div class="act-body"><span class="act-time">03-19 20:00</span><span class="act-text">投资顾问 Agent 团队 - 六步全自动 &lt;3秒验证通过</span></div></div><div class="activity"><span class="act-icon">✅</span><div class="act-body"><span class="act-time">03-19 20:00</span><span class="act-text">语音对话闭环 - 全链路语音交互通</span></div></div><div class="activity"><span class="act-icon">✅</span><div class="act-body"><span class="act-time">03-19 20:00</span><span class="act-text">记忆系统优化完成 - MEMORY.md 瘦身</span></div></div><div class="activity"><span class="act-icon">✅</span><div class="act-body"><span class="act-time">03-19 20:00</span><span class="act-text">AGENTS-HEARTBEAT.md 瘦身完成 - 25K→1.5K</span></div></div><div class="activity"><span class="act-icon">✅</span><div class="act-body"><span class="act-time">03-18 20:00</span><span class="act-text">Token消耗与成本核算 - 发现311倍差异根因</span></div></div></div>
   </div>
 
   <!-- 统计图表 -->
@@ -634,77 +232,91 @@ body::before {
       <div class="legend"><div class="legend-item"><span class="legend-dot" style="background:#e94560"></span>💼 工作 <span class="legend-n">2</span></div><div class="legend-item"><span class="legend-dot" style="background:#4895ef"></span>🔧 赛博系统 <span class="legend-n">2</span></div><div class="legend-item"><span class="legend-dot" style="background:#f4845f"></span>💻 技术探索 <span class="legend-n">1</span></div><div class="legend-item"><span class="legend-dot" style="background:#7b2ff7"></span>🎓 MBA <span class="legend-n">1</span></div><div class="legend-item"><span class="legend-dot" style="background:#2ec4b6"></span>📝 内容创作 <span class="legend-n">1</span></div></div>
     </div>
     <div class="mini-stats">
-      <div class="mini-stat">
-        <div class="mini-stat-n" style="color:#e94560">13</div>
-        <div class="mini-stat-l">总任务</div>
-      </div>
-      <div class="mini-stat">
-        <div class="mini-stat-n" style="color:#2ec4b6">46%</div>
-        <div class="mini-stat-l">完成率</div>
-      </div>
+      <div class="mini-stat"><div class="mini-stat-n" style="color:#e94560">15</div><div class="mini-stat-l">总任务</div></div>
+      <div class="mini-stat"><div class="mini-stat-n" style="color:#2ec4b6">53%</div><div class="mini-stat-l">完成率</div></div>
     </div>
   </div>
-
 </div>
 
 <!-- 进度条 -->
 <div class="prog-wrap">
-  <div class="prog-info">
-    <span>PROGRESS</span>
-    <span>6/13 DONE</span>
-  </div>
+  <div class="prog-info"><span>PROGRESS</span><span>8/15 DONE</span></div>
   <div class="prog">
-    <div class="prog-done"  style="width:46%"></div>
-    <div class="prog-doing" style="width:8%"></div>
-    <div class="prog-pend"  style="width:46%"></div>
+    <div class="prog-done" style="width:53%"></div>
+    <div class="prog-doing" style="width:7%"></div>
+    <div class="prog-pend" style="width:40%"></div>
   </div>
 </div>
 
 <!-- Tabs -->
-<div class="tabs"><button class="tab active" data-tab="all">📊 全部 <span class="tab-count">13</span></button>
-<button class="tab" data-tab="work" style="--tab-color:#e94560">💼 工作 <span class="tab-count">2</span></button>
-<button class="tab" data-tab="mba" style="--tab-color:#7b2ff7">🎓 MBA <span class="tab-count">1</span></button>
-<button class="tab" data-tab="sys" style="--tab-color:#4895ef">🔧 赛博系统 <span class="tab-count">2</span></button>
-<button class="tab" data-tab="tech" style="--tab-color:#f4845f">💻 技术探索 <span class="tab-count">1</span></button>
-<button class="tab" data-tab="content" style="--tab-color:#2ec4b6">📝 内容创作 <span class="tab-count">1</span></button></div>
-<div class="tab-panel active" id="tab-all"><div class="board"><div class="col"><div class="col-head col-doing">🔄 进行中 <span class="cnt">1</span></div><div class="col-body"><div class="card"><div class="card-title">投资顾问 Agent 团队</div><div class="card-tags"><span class="tag tag-p1">P1 重要</span><span class="tag tag-stage">⚡ 执行</span></div><div class="card-desc">六步全自动验证通过，screener.py+Cron已上线，待封装 analyst/advisor</div><div class="card-log">[3/19] 数据源验证5个
+<div class="tabs"><button class="tab active" data-tab="all">📊 全部 <span class="tab-count">15</span></button>
+<button class="tab" data-tab="work工作" style="--tab-color:#e94560">💼 工作 <span class="tab-count">2</span></button>
+<button class="tab" data-tab="mbaMBA" style="--tab-color:#7b2ff7">🎓 MBA <span class="tab-count">1</span></button>
+<button class="tab" data-tab="sys赛博系统" style="--tab-color:#4895ef">🔧 赛博系统 <span class="tab-count">2</span></button>
+<button class="tab" data-tab="tech技术探索" style="--tab-color:#f4845f">💻 技术探索 <span class="tab-count">1</span></button>
+<button class="tab" data-tab="content内容创作" style="--tab-color:#2ec4b6">📝 内容创作 <span class="tab-count">1</span></button></div>
+<div class="tab-panel active" id="tab-all"><div class="board">
+<div class="col"><div class="col-head col-doing">🔄 进行中 <span class="cnt">1</span></div><div class="col-body"><div class="card" ><div class="card-title">投资顾问 Agent 团队</div><div class="card-tags"><span class="tag tag-p1">P1 重要</span><span class="tag tag-stage">⚡ 执行</span></div><div class="card-desc">六步全自动验证通过，screener.py+Cron已上线，待封装 analyst/advisor</div><div class="card-log">[3/19] 数据源验证5个
 [3/19] 六步全自动 <3秒
 [3/19] screener.py+Cron上线
-[3/19] 卖出提醒Cron上线</div></div></div></div><div class="col"><div class="col-head col-pending">⏸️ 待处理 <span class="cnt">6</span></div><div class="col-body"><div class="card"><div class="card-title">MBA 毕业论文选题与撰写</div><div class="card-tags"><span class="tag tag-p1">P1 重要</span><span class="tag tag-stage">📋 规划</span></div><div class="card-desc">待选题</div></div><div class="card"><div class="card-title">技术博客/公众号开通</div><div class="card-tags"><span class="tag tag-p2">P2 普通</span><span class="tag tag-stage">📋 规划</span></div><div class="card-desc">待启动</div></div><div class="card"><div class="card-title">百亿级曲库数据处理方案</div><div class="card-tags"><span class="tag tag-p1">P1 重要</span><span class="tag tag-stage">📋 规划</span></div><div class="card-desc">方案待落地</div></div><div class="card"><div class="card-title">抖音监控修复</div><div class="card-tags"><span class="tag tag-p2">P2 普通</span><span class="tag tag-stage">📋 规划</span></div><div class="card-block">⚠️ Chrome Relay 扩展连接问题，需登录方案或 Cookie/API</div></div><div class="card"><div class="card-title">找施旸当面聊 MOB 画像采买服务</div><div class="card-tags"><span class="tag tag-p1">P1 重要</span><span class="tag tag-stage">⏳ 等待中</span></div><div class="card-desc">已聊完，等联盟启动后再对接</div><div class="card-log">[3/17] 从微信截图录入
-[3/17] 已聊完，等联盟启动</div></div><div class="card"><div class="card-title">PDF 生成器 WeasyPrint 依赖修复</div><div class="card-tags"><span class="tag tag-p3">P3 低优</span><span class="tag tag-stage">📋 规划</span></div><div class="card-block">⚠️ WeasyPrint 依赖问题，可选修复</div></div></div></div><div class="col"><div class="col-head col-done">✅ 已完成 <span class="cnt">6</span></div><div class="col-body"><div class="card" style="opacity:0.55"><div class="card-title">AGENTS-HEARTBEAT.md 瘦身</div><div class="card-tags"><span class="tag tag-p2">P2 普通</span><span class="tag tag-stage">🗄️ 归档</span></div><div class="card-desc">25KB→1.5K，详细规范移到 docs/execution-spec.md</div><div class="card-log">[3/16] 启动
-[3/19] 完成 25K→1.5K</div></div><div class="card" style="opacity:0.55"><div class="card-title">飞书任务看板上线</div><div class="card-tags"><span class="tag tag-p1">P1 重要</span><span class="tag tag-stage">🗄️ 归档</span></div><div class="card-desc">Bitable + GitHub Pages 看板上线</div><div class="card-log">[3/17] 建表+字段+8条任务
-[3/17] GitHub Pages部署
-[3/17] Mission Control升级</div></div><div class="card" style="opacity:0.55"><div class="card-title">语音对话闭环</div><div class="card-tags"><span class="tag tag-p2">P2 普通</span><span class="tag tag-stage">🗄️ 归档</span></div><div class="card-desc">飞书语音→转文字→处理→TTS→飞书语音条，全链路通</div><div class="card-log">[3/19] edge-tts+opus方案验证
+[3/19] 卖出提醒Cron上线</div></div></div></div>
+<div class="col"><div class="col-head col-pending">⏸️ 待处理 <span class="cnt">6</span></div><div class="col-body"><div class="card" ><div class="card-title">MBA 毕业论文选题与撰写</div><div class="card-tags"><span class="tag tag-p1">P1 重要</span><span class="tag tag-stage">📋 规划</span></div><div class="card-desc">待选题</div></div><div class="card" ><div class="card-title">技术博客/公众号开通</div><div class="card-tags"><span class="tag tag-p2">P2 普通</span><span class="tag tag-stage">📋 规划</span></div><div class="card-desc">待启动</div></div><div class="card" ><div class="card-title">百亿级曲库数据处理方案</div><div class="card-tags"><span class="tag tag-p1">P1 重要</span><span class="tag tag-stage">📋 规划</span></div><div class="card-desc">方案待落地</div></div><div class="card" ><div class="card-title">抖音监控修复</div><div class="card-tags"><span class="tag tag-p2">P2 普通</span><span class="tag tag-stage">📋 规划</span></div><div class="card-block">⚠️ Chrome Relay 扩展连接问题，需登录方案或 Cookie/API</div></div><div class="card" ><div class="card-title">找施旸当面聊 MOB 画像采买服务</div><div class="card-tags"><span class="tag tag-p1">P1 重要</span><span class="tag tag-stage">⏳ 等待中</span></div><div class="card-desc">已聊完，等联盟启动后再对接</div><div class="card-log">[3/17] 从微信截图录入
+[3/17] 已聊完，等联盟启动</div></div><div class="card" ><div class="card-title">PDF 生成器 WeasyPrint 依赖修复</div><div class="card-tags"><span class="tag tag-p3">P3 低优</span><span class="tag tag-stage">📋 规划</span></div><div class="card-block">⚠️ WeasyPrint 依赖问题，可选修复</div></div></div></div>
+<div class="col"><div class="col-head col-done">✅ 已完成 <span class="cnt">8</span></div><div class="col-body"><div class="card" style="opacity:0.55"><div class="card-title">语音对话闭环</div><div class="card-tags"><span class="tag tag-p2">P2 普通</span><span class="tag tag-stage">🗄️ 归档</span></div><div class="card-desc">飞书语音→转文字→处理→TTS→飞书语音条，全链路通</div><div class="card-log">[3/19] edge-tts+opus方案验证
 [3/19] local_asr.py本地ASR</div></div><div class="card" style="opacity:0.55"><div class="card-title">Token消耗与成本核算</div><div class="card-tags"><span class="tag tag-p1">P1 重要</span><span class="tag tag-stage">🗄️ 归档</span></div><div class="card-desc">发现 OpenClaw usage 解析 bug，fx-netease 实际消耗远超报告值</div><div class="card-log">[3/18] 发现311倍差异
 [3/18] 根因分析完成</div></div><div class="card" style="opacity:0.55"><div class="card-title">Task Tracker v6 重构</div><div class="card-tags"><span class="tag tag-p1">P1 重要</span><span class="tag tag-stage">🗄️ 归档</span></div><div class="card-desc">五层分离重构完成，12文件交付，pipeline端到端通过</div><div class="card-log">[3/21] 需求文档+设计文档
 [3/21] Coder实现阶段1-4
-[3/21] 全量验证通过</div></div></div></div></div></div>
-<div class="tab-panel" id="tab-work"><div class="board"><div class="col"><div class="col-head col-doing">🔄 进行中 <span class="cnt">0</span></div><div class="col-body"><div class="empty">🎯 暂无</div></div></div><div class="col"><div class="col-head col-pending">⏸️ 待处理 <span class="cnt">2</span></div><div class="col-body"><div class="card"><div class="card-title">百亿级曲库数据处理方案</div><div class="card-tags"><span class="tag tag-p1">P1 重要</span><span class="tag tag-stage">📋 规划</span></div><div class="card-desc">方案待落地</div></div><div class="card"><div class="card-title">找施旸当面聊 MOB 画像采买服务</div><div class="card-tags"><span class="tag tag-p1">P1 重要</span><span class="tag tag-stage">⏳ 等待中</span></div><div class="card-desc">已聊完，等联盟启动后再对接</div><div class="card-log">[3/17] 从微信截图录入
-[3/17] 已聊完，等联盟启动</div></div></div></div><div class="col"><div class="col-head col-done">✅ 已完成 <span class="cnt">0</span></div><div class="col-body"><div class="empty">📭 暂无</div></div></div></div></div>
-<div class="tab-panel" id="tab-mba"><div class="board"><div class="col"><div class="col-head col-doing">🔄 进行中 <span class="cnt">0</span></div><div class="col-body"><div class="empty">🎯 暂无</div></div></div><div class="col"><div class="col-head col-pending">⏸️ 待处理 <span class="cnt">1</span></div><div class="col-body"><div class="card"><div class="card-title">MBA 毕业论文选题与撰写</div><div class="card-tags"><span class="tag tag-p1">P1 重要</span><span class="tag tag-stage">📋 规划</span></div><div class="card-desc">待选题</div></div></div></div><div class="col"><div class="col-head col-done">✅ 已完成 <span class="cnt">0</span></div><div class="col-body"><div class="empty">📭 暂无</div></div></div></div></div>
-<div class="tab-panel" id="tab-sys"><div class="board"><div class="col"><div class="col-head col-doing">🔄 进行中 <span class="cnt">0</span></div><div class="col-body"><div class="empty">🎯 暂无</div></div></div><div class="col"><div class="col-head col-pending">⏸️ 待处理 <span class="cnt">2</span></div><div class="col-body"><div class="card"><div class="card-title">抖音监控修复</div><div class="card-tags"><span class="tag tag-p2">P2 普通</span><span class="tag tag-stage">📋 规划</span></div><div class="card-block">⚠️ Chrome Relay 扩展连接问题，需登录方案或 Cookie/API</div></div><div class="card"><div class="card-title">PDF 生成器 WeasyPrint 依赖修复</div><div class="card-tags"><span class="tag tag-p3">P3 低优</span><span class="tag tag-stage">📋 规划</span></div><div class="card-block">⚠️ WeasyPrint 依赖问题，可选修复</div></div></div></div><div class="col"><div class="col-head col-done">✅ 已完成 <span class="cnt">6</span></div><div class="col-body"><div class="card" style="opacity:0.55"><div class="card-title">AGENTS-HEARTBEAT.md 瘦身</div><div class="card-tags"><span class="tag tag-p2">P2 普通</span><span class="tag tag-stage">🗄️ 归档</span></div><div class="card-desc">25KB→1.5K，详细规范移到 docs/execution-spec.md</div><div class="card-log">[3/16] 启动
-[3/19] 完成 25K→1.5K</div></div><div class="card" style="opacity:0.55"><div class="card-title">飞书任务看板上线</div><div class="card-tags"><span class="tag tag-p1">P1 重要</span><span class="tag tag-stage">🗄️ 归档</span></div><div class="card-desc">Bitable + GitHub Pages 看板上线</div><div class="card-log">[3/17] 建表+字段+8条任务
-[3/17] GitHub Pages部署
-[3/17] Mission Control升级</div></div><div class="card" style="opacity:0.55"><div class="card-title">语音对话闭环</div><div class="card-tags"><span class="tag tag-p2">P2 普通</span><span class="tag tag-stage">🗄️ 归档</span></div><div class="card-desc">飞书语音→转文字→处理→TTS→飞书语音条，全链路通</div><div class="card-log">[3/19] edge-tts+opus方案验证
+[3/21] 全量验证通过</div></div><div class="card" style="opacity:0.55"><div class="card-title">研发团队自我改造</div><div class="card-tags"><span class="tag tag-p1">P1 重要</span><span class="tag tag-stage">🗄️ 归档</span></div><div class="card-desc">P0共享配置+日记清理 + P1飞书通知库+trader-pack拆分，全部验证通过</div><div class="card-log">[3/21] P0共享配置模块
+[3/21] P1飞书通知库+拆分
+[3/21] 全量自检通过</div></div><div class="card" style="opacity:0.55"><div class="card-title">自我改造全面自检</div><div class="card-tags"><span class="tag tag-p2">P2 普通</span><span class="tag tag-stage">🗄️ 归档</span></div><div class="card-desc">13文件编译通过，3项运行验证通过，Bitable看板同步</div><div class="card-log">[3/21] 13文件编译通过
+[3/21] 3项运行验证通过</div></div></div></div>
+</div></div>
+<div class="tab-panel" id="tab-work工作"><div class="board">
+<div class="col"><div class="col-head col-doing">🔄 进行中 <span class="cnt">0</span></div><div class="col-body"><div class="empty">🎯 暂无</div></div></div>
+<div class="col"><div class="col-head col-pending">⏸️ 待处理 <span class="cnt">2</span></div><div class="col-body"><div class="card" ><div class="card-title">百亿级曲库数据处理方案</div><div class="card-tags"><span class="tag tag-p1">P1 重要</span><span class="tag tag-stage">📋 规划</span></div><div class="card-desc">方案待落地</div></div><div class="card" ><div class="card-title">找施旸当面聊 MOB 画像采买服务</div><div class="card-tags"><span class="tag tag-p1">P1 重要</span><span class="tag tag-stage">⏳ 等待中</span></div><div class="card-desc">已聊完，等联盟启动后再对接</div><div class="card-log">[3/17] 从微信截图录入
+[3/17] 已聊完，等联盟启动</div></div></div></div>
+<div class="col"><div class="col-head col-done">✅ 已完成 <span class="cnt">0</span></div><div class="col-body"><div class="empty">📭 暂无</div></div></div>
+</div></div>
+<div class="tab-panel" id="tab-mbaMBA"><div class="board">
+<div class="col"><div class="col-head col-doing">🔄 进行中 <span class="cnt">0</span></div><div class="col-body"><div class="empty">🎯 暂无</div></div></div>
+<div class="col"><div class="col-head col-pending">⏸️ 待处理 <span class="cnt">1</span></div><div class="col-body"><div class="card" ><div class="card-title">MBA 毕业论文选题与撰写</div><div class="card-tags"><span class="tag tag-p1">P1 重要</span><span class="tag tag-stage">📋 规划</span></div><div class="card-desc">待选题</div></div></div></div>
+<div class="col"><div class="col-head col-done">✅ 已完成 <span class="cnt">0</span></div><div class="col-body"><div class="empty">📭 暂无</div></div></div>
+</div></div>
+<div class="tab-panel" id="tab-sys赛博系统"><div class="board">
+<div class="col"><div class="col-head col-doing">🔄 进行中 <span class="cnt">0</span></div><div class="col-body"><div class="empty">🎯 暂无</div></div></div>
+<div class="col"><div class="col-head col-pending">⏸️ 待处理 <span class="cnt">2</span></div><div class="col-body"><div class="card" ><div class="card-title">抖音监控修复</div><div class="card-tags"><span class="tag tag-p2">P2 普通</span><span class="tag tag-stage">📋 规划</span></div><div class="card-block">⚠️ Chrome Relay 扩展连接问题，需登录方案或 Cookie/API</div></div><div class="card" ><div class="card-title">PDF 生成器 WeasyPrint 依赖修复</div><div class="card-tags"><span class="tag tag-p3">P3 低优</span><span class="tag tag-stage">📋 规划</span></div><div class="card-block">⚠️ WeasyPrint 依赖问题，可选修复</div></div></div></div>
+<div class="col"><div class="col-head col-done">✅ 已完成 <span class="cnt">8</span></div><div class="col-body"><div class="card" style="opacity:0.55"><div class="card-title">语音对话闭环</div><div class="card-tags"><span class="tag tag-p2">P2 普通</span><span class="tag tag-stage">🗄️ 归档</span></div><div class="card-desc">飞书语音→转文字→处理→TTS→飞书语音条，全链路通</div><div class="card-log">[3/19] edge-tts+opus方案验证
 [3/19] local_asr.py本地ASR</div></div><div class="card" style="opacity:0.55"><div class="card-title">Token消耗与成本核算</div><div class="card-tags"><span class="tag tag-p1">P1 重要</span><span class="tag tag-stage">🗄️ 归档</span></div><div class="card-desc">发现 OpenClaw usage 解析 bug，fx-netease 实际消耗远超报告值</div><div class="card-log">[3/18] 发现311倍差异
 [3/18] 根因分析完成</div></div><div class="card" style="opacity:0.55"><div class="card-title">Task Tracker v6 重构</div><div class="card-tags"><span class="tag tag-p1">P1 重要</span><span class="tag tag-stage">🗄️ 归档</span></div><div class="card-desc">五层分离重构完成，12文件交付，pipeline端到端通过</div><div class="card-log">[3/21] 需求文档+设计文档
 [3/21] Coder实现阶段1-4
-[3/21] 全量验证通过</div></div></div></div></div></div>
-<div class="tab-panel" id="tab-tech"><div class="board"><div class="col"><div class="col-head col-doing">🔄 进行中 <span class="cnt">1</span></div><div class="col-body"><div class="card"><div class="card-title">投资顾问 Agent 团队</div><div class="card-tags"><span class="tag tag-p1">P1 重要</span><span class="tag tag-stage">⚡ 执行</span></div><div class="card-desc">六步全自动验证通过，screener.py+Cron已上线，待封装 analyst/advisor</div><div class="card-log">[3/19] 数据源验证5个
+[3/21] 全量验证通过</div></div><div class="card" style="opacity:0.55"><div class="card-title">研发团队自我改造</div><div class="card-tags"><span class="tag tag-p1">P1 重要</span><span class="tag tag-stage">🗄️ 归档</span></div><div class="card-desc">P0共享配置+日记清理 + P1飞书通知库+trader-pack拆分，全部验证通过</div><div class="card-log">[3/21] P0共享配置模块
+[3/21] P1飞书通知库+拆分
+[3/21] 全量自检通过</div></div><div class="card" style="opacity:0.55"><div class="card-title">自我改造全面自检</div><div class="card-tags"><span class="tag tag-p2">P2 普通</span><span class="tag tag-stage">🗄️ 归档</span></div><div class="card-desc">13文件编译通过，3项运行验证通过，Bitable看板同步</div><div class="card-log">[3/21] 13文件编译通过
+[3/21] 3项运行验证通过</div></div></div></div>
+</div></div>
+<div class="tab-panel" id="tab-tech技术探索"><div class="board">
+<div class="col"><div class="col-head col-doing">🔄 进行中 <span class="cnt">1</span></div><div class="col-body"><div class="card" ><div class="card-title">投资顾问 Agent 团队</div><div class="card-tags"><span class="tag tag-p1">P1 重要</span><span class="tag tag-stage">⚡ 执行</span></div><div class="card-desc">六步全自动验证通过，screener.py+Cron已上线，待封装 analyst/advisor</div><div class="card-log">[3/19] 数据源验证5个
 [3/19] 六步全自动 <3秒
 [3/19] screener.py+Cron上线
-[3/19] 卖出提醒Cron上线</div></div></div></div><div class="col"><div class="col-head col-pending">⏸️ 待处理 <span class="cnt">0</span></div><div class="col-body"><div class="empty">✨ 全部处理完毕</div></div></div><div class="col"><div class="col-head col-done">✅ 已完成 <span class="cnt">0</span></div><div class="col-body"><div class="empty">📭 暂无</div></div></div></div></div>
-<div class="tab-panel" id="tab-content"><div class="board"><div class="col"><div class="col-head col-doing">🔄 进行中 <span class="cnt">0</span></div><div class="col-body"><div class="empty">🎯 暂无</div></div></div><div class="col"><div class="col-head col-pending">⏸️ 待处理 <span class="cnt">1</span></div><div class="col-body"><div class="card"><div class="card-title">技术博客/公众号开通</div><div class="card-tags"><span class="tag tag-p2">P2 普通</span><span class="tag tag-stage">📋 规划</span></div><div class="card-desc">待启动</div></div></div></div><div class="col"><div class="col-head col-done">✅ 已完成 <span class="cnt">0</span></div><div class="col-body"><div class="empty">📭 暂无</div></div></div></div></div>
+[3/19] 卖出提醒Cron上线</div></div></div></div>
+<div class="col"><div class="col-head col-pending">⏸️ 待处理 <span class="cnt">0</span></div><div class="col-body"><div class="empty">✨ 全部处理完毕</div></div></div>
+<div class="col"><div class="col-head col-done">✅ 已完成 <span class="cnt">0</span></div><div class="col-body"><div class="empty">📭 暂无</div></div></div>
+</div></div>
+<div class="tab-panel" id="tab-content内容创作"><div class="board">
+<div class="col"><div class="col-head col-doing">🔄 进行中 <span class="cnt">0</span></div><div class="col-body"><div class="empty">🎯 暂无</div></div></div>
+<div class="col"><div class="col-head col-pending">⏸️ 待处理 <span class="cnt">1</span></div><div class="col-body"><div class="card" ><div class="card-title">技术博客/公众号开通</div><div class="card-tags"><span class="tag tag-p2">P2 普通</span><span class="tag tag-stage">📋 规划</span></div><div class="card-desc">待启动</div></div></div></div>
+<div class="col"><div class="col-head col-done">✅ 已完成 <span class="cnt">0</span></div><div class="col-body"><div class="empty">📭 暂无</div></div></div>
+</div></div>
 
-<div class="footer">🦞 CYBER LOBSTER MISSION CONTROL · POWERED BY OPENCLAW · 2026-03-21T21:45:03+08:00</div>
+<div class="footer">🦞 CYBER LOBSTER MISSION CONTROL · POWERED BY OPENCLAW</div>
 
 <script>
-document.querySelectorAll('.tab').forEach(function(btn) {
-  btn.addEventListener('click', function() {
-    document.querySelectorAll('.tab').forEach(function(b) { b.classList.remove('active'); });
-    document.querySelectorAll('.tab-panel').forEach(function(p) { p.classList.remove('active'); });
+document.querySelectorAll('.tab').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
     btn.classList.add('active');
-    document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+    document.getElementById('tab-'+btn.dataset.tab).classList.add('active');
   });
 });
 </script>
